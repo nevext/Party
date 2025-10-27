@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading Game Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Devil May Cry 5 special font (local). Provide the file in assets/fonts for best results. */
+    @font-face {
+      font-family: 'Feast of Flesh BB';
+      src: url('assets/fonts/FeastOfFleshBB.woff2') format('woff2'),
+           url('assets/fonts/FeastOfFleshBB.woff') format('woff'),
+           url('assets/fonts/FeastOfFleshBB.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    /* Fonte global: M PLUS Rounded 1c Black em tudo */
+    :root { --font-main: 'M PLUS Rounded 1c', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
+    *, *::before, *::after {
+      font-family: var(--font-main) !important;
+      font-weight: 900 !important; /* sempre negrito */
+      font-synthesis-weight: none;
+      transition: background-color 1.2s ease, color 1.2s ease, border-color 1.2s ease, box-shadow 1.2s ease, text-shadow 1.2s ease, filter 1.2s ease;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: var(--font-main);
+      font-weight: 900;
+      overflow: hidden;
+      color: white;
+    }
+
+    /* Smooth global theme-change timing boost */
+    body.dmc5-transitioning *, body.dmc5-transitioning {
+      transition-duration: 1.4s !important;
+    }
+    body.miside-transitioning *, body.miside-transitioning {
+      transition-duration: 1.4s !important;
+    }
+    body.re4-transitioning *, body.re4-transitioning {
+      transition-duration: 1.4s !important;
+    }
+    body.re7-transitioning *, body.re7-transitioning {
+      transition-duration: 1.4s !important;
+    }
+    body.snas-transitioning *, body.snas-transitioning {
+      transition-duration: 1.4s !important;
+    }
+    /* DMC5 mode: black + metallic gray theme and special font */
+    body.dmc5-mode { 
+      --font-main: 'Feast of Flesh BB', 'M PLUS Rounded 1c', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(900px 520px at 85% 0%, rgba(40,80,200,.12), rgba(0,0,0,0)),
+        radial-gradient(1000px 540px at 10% 110%, rgba(20,60,160,.1), rgba(0,0,0,0)),
+        linear-gradient(180deg, #0b0b0b, #121420 45%, #0f1220 100%);
+      color: #e6e6e6;
+    }
+    body.dmc5-mode #menu,
+    body.dmc5-mode #content-card,
+    body.dmc5-mode #detail-card,
+    body.dmc5-mode #info-card {
+      background: linear-gradient(180deg, rgba(24,24,24,.96), rgba(10,10,10,.96)) !important;
+      border-color: #b6bcc2 !important;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.02);
+      color: #e6e6e6;
+    }
+    @keyframes bladeFlicker { 0%, 100% { text-shadow: 0 0 10px rgba(160,190,255,.24), 0 0 26px rgba(100,160,255,.14); } 50% { text-shadow: 0 0 14px rgba(180,210,255,.3), 0 0 32px rgba(120,180,255,.18); } }
+    body.dmc5-mode #menu h1 {
+      color: #d6dcff !important;
+      animation: bladeFlicker 3.4s ease-in-out infinite;
+    }
+    body.dmc5-mode #menu button,
+    body.dmc5-mode #content-card button,
+    body.dmc5-mode #detail-card button {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0d0f1a, #14182a) !important;
+      color: #e6e6e6 !important;
+      border-color: #c0c6cc !important;
+      box-shadow: 0 6px 18px rgba(0,0,0,.55), 0 0 18px rgba(100,160,255,.12) !important;
+    }
+    body.dmc5-mode #menu button::after,
+    body.dmc5-mode #content-card button::after,
+    body.dmc5-mode #detail-card button::after { content:""; position:absolute; inset:-20% -60%; background: linear-gradient(105deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.22) 45%, rgba(255,255,255,0) 60%); transform: translateX(-120%) rotate(2deg); transition: transform .9s ease; mix-blend-mode: screen; pointer-events:none; }
+    body.dmc5-mode #menu button:hover::after,
+    body.dmc5-mode #content-card button:hover::after,
+    body.dmc5-mode #detail-card button:hover::after { transform: translateX(120%) rotate(2deg); }
+    body.dmc5-mode #menu button:hover,
+    body.dmc5-mode #content-card button:hover,
+    body.dmc5-mode #detail-card button:hover {
+      background: linear-gradient(180deg, #1a1a1a, #262626) !important;
+      color: #f2f2f2 !important;
+      box-shadow: 0 10px 26px rgba(0,0,0,.6) !important;
+    }
+    body.dmc5-mode .help-btn { background: #0d0d0d !important; color:#e6e6e6 !important; border-color:#c0c6cc !important; }
+    body.dmc5-mode .help-btn:hover { background:#e6e6e6 !important; color:#0d0d0d !important; }
+    body.dmc5-mode .progress-container { border-color: #c0c6cc !important; }
+    body.dmc5-mode .progress-bar { background: linear-gradient(90deg, #9aa0a6 0%, #c8ccd1 100%) !important; box-shadow: 0 0 12px rgba(180,180,180,.35) !important; }
+    body.dmc5-mode #music-widget { filter: saturate(.92) contrast(1.04); box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 26px rgba(120,180,255,.2); }
+    body.dmc5-mode #music-toggle { background:#0d0d0d; color:#e6e6e6; border-color:#c0c6cc; }
+
+    /* DMC5 overlay: streaks/particles azuladas */
+    #dmc5-overlay { position: fixed; inset:0; pointer-events:none; z-index:4; opacity:0; transition: opacity 1.2s ease; }
+    body.dmc5-mode #dmc5-overlay { opacity: .24; }
+    #dmc5-overlay::before, #dmc5-overlay::after { content:""; position:absolute; inset:-10%; background:
+      linear-gradient(120deg, rgba(120,180,255,.1) 0%, rgba(0,0,0,0) 30%),
+      radial-gradient(40% 30% at 80% 20%, rgba(60,120,255,.14), rgba(0,0,0,0) 60%),
+      repeating-linear-gradient( -12deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,0) 2px 6px);
+      mix-blend-mode: screen; filter: blur(4px) saturate(1.02); animation: slashSweep 28s linear infinite; }
+    #dmc5-overlay::after { animation-duration: 36s; opacity: .8; }
+    @keyframes slashSweep { 0% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(-2%, 1%, 0) scale(1.02); } 100% { transform: translate3d(0,0,0) scale(1); } }
+
+    /* DMC5 panel reposition with smooth transitions */
+    #content-card, #detail-card, #info-card { transition: left .6s ease, top .6s ease, transform .6s ease; }
+    #content-card.dmc5-shift { left: 48% !important; top: 48% !important; transform: translate(-50%, -50%) scale(1) !important; }
+    #detail-card.dmc5-shift { left: 62% !important; top: 54% !important; transform: translate(-50%, -50%) scale(1) !important; }
+    #info-card.dmc5-shift { left: 38% !important; top: 42% !important; transform: translate(-50%, -50%) scale(1) !important; }
+
+    /* MISIDE mode: petróleo/teal com neon ciano e detalhes em vermelho escuro/branco */
+    body.miside-mode {
+      background:
+        radial-gradient(1200px 600px at 85% 110%, rgba(0,140,160,.16), rgba(0,0,0,0)),
+        radial-gradient(1000px 500px at 10% -10%, rgba(0,80,96,.18), rgba(0,0,0,0)),
+        linear-gradient(180deg, #051013, #08161a 45%, #0c1c22 100%);
+      color: #eaf6f9;
+    }
+    body.miside-mode #menu,
+    body.miside-mode #content-card,
+    body.miside-mode #detail-card,
+    body.miside-mode #info-card {
+      background:
+        linear-gradient(180deg, rgba(10,18,22,.95), rgba(6,12,14,.95));
+      border-color: #d6f1f6;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 28px rgba(0,220,255,.14), 0 0 0 1px rgba(255,255,255,.02) inset;
+      color: #eaf6f9;
+    }
+    /* Título com respiração neon ciano e leve flicker */
+    @keyframes neonBreath { 0%,100%{ text-shadow: 0 0 8px rgba(0,255,240,.22), 0 0 18px rgba(0,200,255,.16); } 50%{ text-shadow: 0 0 14px rgba(0,255,240,.28), 0 0 26px rgba(0,220,255,.2); } }
+    body.miside-mode #menu h1 {
+      color: #eaf6f9 !important;
+      animation: neonBreath 3.6s ease-in-out infinite;
+    }
+    /* Botões com faixa brilhante animada no hover */
+    body.miside-mode #menu button,
+    body.miside-mode #content-card button,
+    body.miside-mode #detail-card button {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0a171b, #0f2026);
+      color: #eaf6f9;
+      border-color: #d6f1f6;
+      box-shadow: 0 6px 18px rgba(0,0,0,.55), 0 0 18px rgba(0,220,255,.12);
+      isolation: isolate;
+    }
+    body.miside-mode #menu button::after,
+    body.miside-mode #content-card button::after,
+    body.miside-mode #detail-card button::after {
+      content: "";
+      position: absolute; inset: -20% -60%;
+      background: linear-gradient(105deg, rgba(255,255,255,.0) 30%, rgba(255,255,255,.22) 45%, rgba(255,255,255,.0) 60%);
+      transform: translateX(-120%) rotate(2deg);
+      transition: transform .9s ease;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+    body.miside-mode #menu button:hover::after,
+    body.miside-mode #content-card button:hover::after,
+    body.miside-mode #detail-card button:hover::after { transform: translateX(120%) rotate(2deg); }
+    body.miside-mode #menu button:hover,
+    body.miside-mode #content-card button:hover,
+    body.miside-mode #detail-card button:hover {
+      background: linear-gradient(180deg, #0f2026, #122731);
+      color: #ffffff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.6), 0 0 22px rgba(0,240,255,.18);
+    }
+    body.miside-mode .help-btn { background:#0a171b; color:#eaf6f9; border-color:#d6f1f6; }
+    body.miside-mode .help-btn:hover { background:#eaf6f9; color:#0a171b; }
+    body.miside-mode .progress-container { border-color: #d6f1f6; }
+    body.miside-mode .progress-bar {
+      background: linear-gradient(90deg, #00e0ff 0%, #4cf1ff 100%);
+      box-shadow: 0 0 14px rgba(0,230,255,.35);
+    }
+    body.miside-mode #music-widget { filter: saturate(.98) contrast(1.05); }
+    body.miside-mode #music-toggle { background:#0a171b; color:#eaf6f9; border-color:#d6f1f6; box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(0,240,255,.22); }
+
+    /* Overlay ambiente Miside: brilhos petrol e partículas suaves */
+    #miside-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0; transition: opacity 1.2s ease; }
+    body.miside-mode #miside-overlay { opacity: .24; }
+    #miside-overlay::before, #miside-overlay::after {
+      content: ""; position: absolute; inset: -8%;
+      background:
+        radial-gradient(28% 22% at 18% 78%, rgba(0,180,210,.16), rgba(0,0,0,0) 60%),
+        radial-gradient(24% 18% at 86% 22%, rgba(0,220,255,.12), rgba(0,0,0,0) 60%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,0) 2px 6px);
+      filter: blur(4px) saturate(1.02) contrast(1.02);
+      animation: petrolDrift 26s linear infinite;
+      mix-blend-mode: screen;
+    }
+    #miside-overlay::after { animation-duration: 34s; opacity: .85; }
+    @keyframes petrolDrift {
+      0% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(1%, -1%, 0) scale(1.02); }
+      100% { transform: translate3d(0,0,0) scale(1); }
+    }
+
+    /* RE4 mode: preto, vermelho escuro, cinza metálico; horror europeu com fumaça/textura sutil */
+    body.re4-mode {
+      --font-main: 'Cinzel', 'Times New Roman', Times, serif; /* vibe clássica do RE4 */
+      background:
+        radial-gradient(900px 520px at 15% -10%, rgba(120,0,0,.18), rgba(0,0,0,0)),
+        radial-gradient(1200px 600px at 85% 110%, rgba(60,0,0,.12), rgba(0,0,0,0)),
+        linear-gradient(180deg, #090909, #121212 40%, #151515 100%);
+      color: #e2e2e2;
+    }
+    body.re4-mode #menu,
+    body.re4-mode #content-card,
+    body.re4-mode #detail-card,
+    body.re4-mode #info-card {
+      background: linear-gradient(180deg, rgba(18,18,18,.96), rgba(10,10,10,.96));
+      border-color: #c0c4c8;
+      box-shadow: 0 22px 64px rgba(0,0,0,.72), 0 0 0 1px rgba(255,255,255,.02) inset;
+      color: #e2e2e2;
+    }
+    @keyframes reTitlePulse { 0%,100%{ text-shadow: 0 0 10px rgba(179,18,18,.28), 0 0 22px rgba(179,18,18,.12); } 50%{ text-shadow: 0 0 12px rgba(179,18,18,.34), 0 0 28px rgba(179,18,18,.16); } }
+    body.re4-mode #menu h1 {
+      color: #d0c8c8 !important;
+      text-shadow: 0 0 10px rgba(179,18,18,.24), 0 0 24px rgba(255,255,255,.08) !important;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      animation: reTitlePulse 4s ease-in-out infinite;
+    }
+    body.re4-mode #menu button,
+    body.re4-mode #content-card button,
+    body.re4-mode #detail-card button {
+      position: relative; overflow: hidden;
+      background: linear-gradient(180deg, #0f0f0f, #191919);
+      color: #e2e2e2;
+      border-color: #c2c7cb;
+      box-shadow: 0 6px 18px rgba(0,0,0,.55), 0 0 16px rgba(179,18,18,.16);
+    }
+    body.re4-mode #menu button::after,
+    body.re4-mode #content-card button::after,
+    body.re4-mode #detail-card button::after {
+      content:""; position:absolute; inset:-20% -60%;
+      background: linear-gradient(105deg, rgba(255,255,255,0) 30%, rgba(179,18,18,.28) 45%, rgba(255,255,255,0) 60%);
+      transform: translateX(-120%) rotate(2deg);
+      transition: transform .9s ease; mix-blend-mode: screen; pointer-events:none;
+    }
+    body.re4-mode #menu button:hover::after,
+    body.re4-mode #content-card button:hover::after,
+    body.re4-mode #detail-card button:hover::after { transform: translateX(120%) rotate(2deg); }
+    body.re4-mode #menu button:hover,
+    body.re4-mode #content-card button:hover,
+    body.re4-mode #detail-card button:hover {
+      background: linear-gradient(180deg, #1a1a1a, #212121);
+      color: #ffffff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.6), 0 0 20px rgba(179,18,18,.2);
+    }
+    body.re4-mode .help-btn { background:#0f0f0f; color:#e2e2e2; border-color:#c2c7cb; }
+    body.re4-mode .help-btn:hover { background:#e2e2e2; color:#0f0f0f; }
+    body.re4-mode .progress-container { border-color: #c2c7cb; }
+    body.re4-mode .progress-bar {
+      background: linear-gradient(90deg, #5e0c0c 0%, #9e1313 100%);
+      box-shadow: 0 0 12px rgba(179,18,18,.32);
+    }
+    body.re4-mode #music-widget { filter: saturate(.9) contrast(1.03); }
+    body.re4-mode #music-toggle { background:#0f0f0f; color:#e2e2e2; border-color:#c2c7cb; }
+
+    /* Fumaça/textura overlay para RE4 */
+    #re4-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: .0; transition: opacity 1.4s ease; }
+    body.re4-mode #re4-overlay { opacity: .28; }
+    #re4-overlay::before, #re4-overlay::after {
+      content: ""; position: absolute; inset: -10%;
+      background:
+        radial-gradient(60% 40% at 30% 20%, rgba(120,0,0,.14), rgba(0,0,0,0) 60%),
+        radial-gradient(50% 30% at 70% 80%, rgba(80,0,0,.12), rgba(0,0,0,0) 60%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,0) 2px 6px);
+      filter: blur(6px) contrast(1.03) saturate(.98);
+      animation: smokeShift 28s linear infinite;
+      mix-blend-mode: normal;
+    }
+    #re4-overlay::after { animation-duration: 36s; opacity: .8; }
+  /* RE4 panel reposition with smooth transitions */
+  #content-card, #detail-card, #info-card { transition: left .6s ease, top .6s ease, transform .6s ease; }
+  #content-card.re4-shift { left: 50% !important; top: 52% !important; transform: translate(-50%, -50%) scale(1) !important; }
+  #detail-card.re4-shift { left: 58% !important; top: 54% !important; transform: translate(-50%, -50%) scale(1) !important; }
+  #info-card.re4-shift { left: 42% !important; top: 46% !important; transform: translate(-50%, -50%) scale(1) !important; }
+    @keyframes smokeShift {
+      0% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+      100% { transform: translate3d(0,0,0) scale(1); }
+    }
+
+    /* RE7 mode: preto, cinza, marrom envelhecido; laranja queimado no acento */
+    body.re7-mode {
+      --font-main: 'Oswald', Impact, Haettenschweiler, 'Arial Narrow Bold', 'Arial Narrow', Arial, sans-serif;
+      background:
+        radial-gradient(900px 480px at 85% 0%, rgba(60,34,10,.22), rgba(0,0,0,0)),
+        linear-gradient(180deg, #090909, #0e0e0e 40%, #121212 100%);
+      color: #e4e1dd;
+    }
+    body.re7-mode #menu,
+    body.re7-mode #content-card,
+    body.re7-mode #detail-card,
+    body.re7-mode #info-card {
+      background: linear-gradient(180deg, rgba(22,20,18,.95), rgba(14,12,10,.95));
+      border-color: #c7b7a3;
+      box-shadow: 0 22px 64px rgba(0,0,0,.72), 0 0 20px rgba(64,36,10,.16);
+      color: #e4e1dd;
+    }
+    @keyframes re7TitlePulse { 0%,100% { text-shadow: 0 0 10px rgba(220,180,120,.22), 0 0 24px rgba(0,0,0,.55); } 50% { text-shadow: 0 0 12px rgba(220,180,120,.28), 0 0 28px rgba(0,0,0,.65); } }
+    body.re7-mode #menu h1 {
+      color: #e9e4dc !important;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(220,180,120,.2), 0 0 28px rgba(0,0,0,.6) !important;
+      animation: re7TitlePulse 4.5s ease-in-out infinite;
+    }
+    body.re7-mode #menu button,
+    body.re7-mode #content-card button,
+    body.re7-mode #detail-card button {
+      background: linear-gradient(180deg, #151312, #1b1917);
+      color: #e4e1dd;
+      border-color: #c7b7a3;
+      box-shadow: 0 6px 18px rgba(0,0,0,.55), 0 0 16px rgba(204,110,20,.12);
+    }
+    body.re7-mode #menu button:hover,
+    body.re7-mode #content-card button:hover,
+    body.re7-mode #detail-card button:hover {
+      background: linear-gradient(180deg, #1b1917, #23211f);
+      color: #ffffff;
+      box-shadow: 0 10px 26px rgba(0,0,0,.6), 0 0 20px rgba(204,110,20,.16);
+    }
+    body.re7-mode .help-btn { background:#151312; color:#e4e1dd; border-color:#c7b7a3; }
+    body.re7-mode .help-btn:hover { background:#e4e1dd; color:#151312; }
+    body.re7-mode .progress-container { border-color: #c7b7a3; }
+    body.re7-mode .progress-bar {
+      background: linear-gradient(90deg, #a5530f 0%, #cc6e14 100%); /* laranja queimado */
+      box-shadow: 0 0 12px rgba(204,110,20,.28);
+    }
+    body.re7-mode #music-widget { filter: saturate(.95) contrast(1.04); }
+    body.re7-mode #music-toggle { background:#151312; color:#e4e1dd; border-color:#c7b7a3; }
+
+    /* Efeito vinheta mais marcado para RE7 (portas, ambiente fechado) */
+    #re7-overlay::before, #re7-overlay::after {
+      background:
+        radial-gradient(40% 24% at 20% 30%, rgba(80,48,20,.16), rgba(0,0,0,0) 60%),
+        radial-gradient(36% 22% at 80% 70%, rgba(96,56,24,.14), rgba(0,0,0,0) 60%),
+        radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.35) 85%),
+        repeating-linear-gradient(12deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,0) 2px 7px);
+    }
+
+    /* Porta abrindo/fechando para cards no RE7 */
+    @keyframes doorOpen {
+      0% { transform: translate(-50%, -50%) perspective(1000px) rotateY(-85deg) scale(.98); opacity: 0; filter: brightness(.8); }
+      60% { opacity: 1; }
+      100% { transform: translate(-50%, -50%) perspective(1000px) rotateY(0deg) scale(1); opacity: 1; filter: none; }
+    }
+    @keyframes doorClose {
+      0% { transform: translate(-50%, -50%) perspective(1000px) rotateY(0deg) scale(1); opacity: 1; filter: none; }
+      100% { transform: translate(-50%, -50%) perspective(1000px) rotateY(85deg) scale(.98); opacity: 0; filter: brightness(.8); }
+    }
+    body.re7-mode #content-card,
+    body.re7-mode #detail-card,
+    body.re7-mode #info-card {
+      transform-style: preserve-3d; backface-visibility: hidden; perspective: 1000px;
+    }
+
+    /* Texturas sujas/desgastadas: manchas/riscos leves */
+    #re7-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: 0; transition: opacity 1.4s ease; }
+    body.re7-mode #re7-overlay { opacity: .22; }
+    #re7-overlay::before, #re7-overlay::after {
+      content: ""; position: absolute; inset: -8%;
+      background:
+        radial-gradient(40% 24% at 20% 30%, rgba(80,48,20,.16), rgba(0,0,0,0) 60%),
+        radial-gradient(36% 22% at 80% 70%, rgba(96,56,24,.14), rgba(0,0,0,0) 60%),
+        repeating-linear-gradient(12deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,0) 2px 7px);
+      filter: blur(5px) contrast(1.03) saturate(.96);
+      animation: grimeShift 32s linear infinite;
+      mix-blend-mode: normal;
+    }
+    #re7-overlay::after { animation-duration: 41s; opacity: .85; }
+    @keyframes grimeShift {
+      0% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(1%, -2%, 0) scale(1.015); }
+      100% { transform: translate3d(0,0,0) scale(1); }
+    }
+
+    /* SNAS mode: retrô pixel (Press Start 2P), fundo preto/azul escuro e acentos branco/verde limão */
+    body.snas-mode {
+      --font-main: 'Press Start 2P', 'M PLUS Rounded 1c', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(6,16,48,.25), rgba(0,0,0,0)),
+        linear-gradient(180deg, #03050a, #050a14 45%, #070f1c 100%);
+      color: #f5f7ff;
+    }
+    body.snas-mode #menu,
+    body.snas-mode #content-card,
+    body.snas-mode #detail-card,
+    body.snas-mode #info-card {
+      background: linear-gradient(180deg, rgba(8,14,28,.96), rgba(4,8,16,.96));
+      border-color: #bfe8ff;
+      box-shadow: 0 0 0 4px rgba(191,232,255,.06) inset, 0 20px 60px rgba(0,0,0,.7), 0 0 24px rgba(0,180,255,.14);
+      color: #f5f7ff;
+    }
+    body.snas-mode #menu h1 {
+      color: #f5f7ff !important;
+      text-shadow: 0 0 8px rgba(64,200,255,.22), 0 0 18px rgba(0,255,140,.18) !important;
+    }
+    body.snas-mode #menu button,
+    body.snas-mode #content-card button,
+    body.snas-mode #detail-card button {
+      background: linear-gradient(180deg, #060c1a, #091225);
+      color: #e8fbff;
+      border-color: #bfe8ff;
+      box-shadow: 0 0 0 3px rgba(191,232,255,.08) inset, 0 6px 18px rgba(0,0,0,.55);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    body.snas-mode #menu button:hover,
+    body.snas-mode #content-card button:hover,
+    body.snas-mode #detail-card button:hover {
+      background: linear-gradient(180deg, #091225, #0c1830);
+      color: #a7ff4a; /* verde limão */
+      box-shadow: 0 0 0 3px rgba(167,255,74,.28) inset, 0 10px 26px rgba(0,0,0,.6);
+    }
+    body.snas-mode .help-btn { background:#060c1a; color:#e8fbff; border-color:#bfe8ff; }
+    body.snas-mode .help-btn:hover { background:#e8fbff; color:#060c1a; }
+    body.snas-mode .progress-container { border-color: #bfe8ff; }
+    body.snas-mode .progress-bar {
+      background: linear-gradient(90deg, #39ff14 0%, #a7ff4a 100%);
+      box-shadow: 0 0 12px rgba(57,255,20,.35);
+    }
+    body.snas-mode #music-widget { filter: saturate(1.02) contrast(1.06); }
+    body.snas-mode #music-toggle { background:#060c1a; color:#e8fbff; border-color:#bfe8ff; }
+
+    /* Scanlines/pixel glow overlay */
+    #snas-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: 0; transition: opacity 1.4s ease; }
+    body.snas-mode #snas-overlay { opacity: .22; }
+    #snas-overlay::before, #snas-overlay::after {
+      content: ""; position: absolute; inset: -6%;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, rgba(0,0,0,0) 1px 3px),
+        radial-gradient(40% 28% at 60% 10%, rgba(0,180,255,.12), rgba(0,0,0,0) 60%);
+      mix-blend-mode: screen;
+      filter: blur(.6px) contrast(1.02) saturate(1.08);
+      animation: crtScan 14s linear infinite;
+    }
+    #snas-overlay::after { opacity: .7; animation-duration: 19s; }
+    @keyframes crtScan {
+      0% { transform: translate3d(0,0,0); opacity: .9; }
+      50% { transform: translate3d(0,1%,0); opacity: 1; }
+      100% { transform: translate3d(0,0,0); opacity: .9; }
+    }
+
+    /* Container do loading */
+    #loading { text-align: center; width: 50vw; height: 50vh; min-width: 420px; min-height: 320px; display: grid; place-content: center; gap: 22px; }
+    #loading-text { line-height: 1; }
+
+    .letter {
+      display: inline-block;
+      font-size: clamp(3rem, 8vw, 10rem);
+      opacity: 0;
+      transform: translateZ(-500px) scale(0.1);
+      animation: throwIn 1s forwards;
+    }
+
+    @keyframes throwIn {
+      to {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+      }
+    }
+
+    /* Barra de progresso */
+    .progress-container { margin-top: 24px; width: 100%; max-width: 900px; height: 28px; border: 3px solid white; position: relative; margin-left: auto; margin-right: auto; }
+
+    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #39ff14 0%, #00ffa3 100%); box-shadow: 0 0 12px rgba(57,255,20,.6); transition: width 0.3s; }
+
+    .progress-text { margin-top: 12px; font-size: clamp(1.2rem, 2.2vw, 2rem); letter-spacing: .06em; }
+
+  /* Logo flash acima da barra */
+  #flash-logo { position: absolute; left: 50%; top: -1000%; transform: translate(-50%, -50%); opacity: 0; width: clamp(350px, 22%, 180px); pointer-events: none; filter: drop-shadow(0 0 8px rgba(255,255,255,.4)); }
+  .flash-run { animation: flashInOut 5.2s ease-in-out forwards; }
+  @keyframes flashInOut { 0%{opacity:0} 20%{opacity:.5} 80%{opacity:.5} 100%{opacity:0} }
+
+    /* Remoção suave de letras (fade-out) */
+    .fade-away { animation: fadeOut .5s ease forwards; }
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(-6px); } }
+
+    /* Menu estilo jogo */
+    #menu {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      background: rgba(20, 20, 20, 0.95);
+      border: 4px solid white;
+      border-radius: 18px;
+      width: min(90vw, 1100px);
+      min-width: 540px;
+      min-height: 50vh;
+      padding: 48px 56px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+      animation: popup 0.8s forwards;
+      z-index: 2;
+      cursor: grab;
+    }
+    #menu.dragging { cursor: grabbing; box-shadow: 0 0 0 4px rgba(255,255,255,.05) inset, 0 0 32px rgba(255,255,255,.18), 0 0 90px rgba(255,0,120,.18); filter: brightness(1.05); z-index: 9999; }
+    /* Modo livre: usa left/top em pixels sem translate de centralização */
+    #menu.free { transform: translate(0,0) scale(1) !important; position: fixed; }
+
+    @keyframes popup {
+      to {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    #menu h1 {
+      margin-bottom: 28px;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      letter-spacing: .02em;
+      color: red;
+      text-shadow: 0 0 10px red, 0 0 24px rgba(255, 255, 255, 0.35);
+    }
+
+    /* Estilo base para botões do menu e dos cards de conteúdo */
+    #menu button, #content-card button, #detail-card button {
+      --scale: 1;
+      --ty: 0px;
+      display: block;
+      margin: 14px auto;
+      padding: 16px 28px;
+      width: min(560px, 100%);
+      font-size: clamp(1.25rem, 2.4vw, 2rem);
+      background: black;
+      color: white;
+      border: 3px solid white;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform .14s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+      transform: translateY(var(--ty)) scale(var(--scale));
+      transform-origin: center;
+      will-change: transform;
+      box-shadow: 0 6px 18px rgba(0,0,0,.45);
+    }
+
+    #menu button:hover, #content-card button:hover, #detail-card button:hover {
+      background: white;
+      color: black;
+      --ty: -2px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.55);
+    }
+
+    /* Seleção: bloquear interações e animações de saída */
+    #menu.selecting { cursor: default; }
+    #menu.selecting button { pointer-events: none; }
+
+    @keyframes flyLeft { to { transform: translateX(-120vw) rotate(-8deg); opacity: 0; } }
+    @keyframes flyRight { to { transform: translateX(120vw) rotate(8deg); opacity: 0; } }
+    @keyframes flyUp { to { transform: translateY(-120vh) rotate(-4deg); opacity: 0; } }
+    @keyframes flyDown { to { transform: translateY(120vh) rotate(4deg); opacity: 0; } }
+    @keyframes flyUpLeft { to { transform: translate(-110vw, -110vh) rotate(-10deg); opacity: 0; } }
+    @keyframes flyUpRight { to { transform: translate(110vw, -110vh) rotate(10deg); opacity: 0; } }
+    @keyframes flyDownLeft { to { transform: translate(-110vw, 110vh) rotate(-6deg); opacity: 0; } }
+    @keyframes flyDownRight { to { transform: translate(110vw, 110vh) rotate(6deg); opacity: 0; } }
+    .fly-left { animation: flyLeft 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-right { animation: flyRight 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-up { animation: flyUp 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-down { animation: flyDown 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-upleft { animation: flyUpLeft 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-upright { animation: flyUpRight 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-downleft { animation: flyDownLeft 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+    .fly-downright { animation: flyDownRight 1.2s cubic-bezier(.16,.84,.44,1) forwards; will-change: transform, opacity; }
+
+    /* Glitch visual para item selecionado durante o movimento */
+    .selected-glitch { text-transform: uppercase; position: relative; }
+    .selected-glitch.glitching { animation: glitchShadow 1.2s steps(16, end) infinite; }
+    @keyframes glitchShadow {
+      0% { text-shadow: 0 0 0 rgba(0,0,0,0); filter: none; }
+      10% { text-shadow: 1px 0 rgba(255,0,0,.7), -1px 0 rgba(0,255,255,.7); filter: contrast(1.1) saturate(1.2); }
+      20% { text-shadow: -2px 0 rgba(255,0,0,.6), 2px 0 rgba(0,255,255,.6); }
+      30% { text-shadow: 2px -1px rgba(255,0,0,.6), -2px 1px rgba(0,255,255,.6); }
+      40% { text-shadow: -1px 1px rgba(255,0,0,.7), 1px -1px rgba(0,255,255,.7); }
+      50% { text-shadow: 0 0 0 rgba(0,0,0,0); filter: none; }
+      60% { text-shadow: 1px -1px rgba(255,0,0,.7), -1px 1px rgba(0,255,255,.7); }
+      70% { text-shadow: -2px 1px rgba(255,0,0,.6), 2px -1px rgba(0,255,255,.6); }
+      80% { text-shadow: 2px 0 rgba(255,0,0,.7), -2px 0 rgba(0,255,255,.7); }
+      90% { text-shadow: -1px 0 rgba(255,0,0,.7), 1px 0 rgba(0,255,255,.7); }
+      100% { text-shadow: 0 0 0 rgba(0,0,0,0); filter: none; }
+    }
+
+    /* Botão de ajuda (interrogação) com glitch no hover */
+    .help-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 34px;
+      height: 34px;
+      margin-left: 10px;
+      border: 3px solid white;
+      border-radius: 50%;
+      background: black;
+      color: white;
+      cursor: pointer;
+      line-height: 1;
+      vertical-align: middle;
+      transition: transform .12s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,.45);
+    }
+    .help-btn:hover { animation: glitchShadow 1.2s steps(16, end) infinite; transform: translateY(-2px); background: white; color: black; }
+
+    /* Fade-out rápido para itens do menu */
+    @keyframes fadeOutMenu { to { opacity: 0; transform: translateY(-6px); } }
+    .fade-out-quick { animation: fadeOutMenu .4s ease forwards; will-change: opacity, transform; }
+
+    /* Tremida ao bloquear clics na comunidade */
+    @keyframes shakeX { 
+      0% { transform: translateX(0); }
+      15% { transform: translateX(-4px); }
+      30% { transform: translateX(4px); }
+      45% { transform: translateX(-3px); }
+      60% { transform: translateX(3px); }
+      75% { transform: translateX(-2px); }
+      90% { transform: translateX(2px); }
+      100% { transform: translateX(0); }
+    }
+    .shake { animation: shakeX .5s ease; }
+
+    /* Widget de música (Miside) */
+    #music-widget {
+      position: fixed;
+      bottom: 72px; /* acima do disco */
+      right: 16px;
+      display: flex; /* barra horizontal minimalista */
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 3px solid white;
+      border-radius: 9999px; /* pílula */
+      /* Fundo padrão (será sobrescrito por tema) */
+      background: rgba(0,0,0,.72);
+      box-shadow: 0 10px 28px rgba(0,0,0,.45);
+      z-index: 6;
+      max-width: 92vw;
+      backdrop-filter: blur(2px);
+      opacity: .9;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    #music-widget:hover { opacity: 1; transform: translateY(-1px); }
+    /* Tema vermelho (Miside) */
+    #music-widget.theme-red {
+      background:
+        repeating-linear-gradient(45deg, rgba(255,105,180,.22) 0 10px, rgba(255,105,180,0) 10px 20px),
+        linear-gradient(180deg, rgba(180,0,40,.92), rgba(120,0,30,.92));
+      box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 28px rgba(255,0,120,.18);
+    }
+    /* Tema azul (Nero - DMC5 vibe) */
+    #music-widget.theme-blue {
+      background:
+        repeating-linear-gradient(45deg, rgba(0,240,255,.18) 0 10px, rgba(0,240,255,0) 10px 20px),
+        linear-gradient(180deg, rgba(14,30,96,.92), rgba(6,16,64,.92));
+      box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 28px rgba(0,180,255,.22);
+    }
+    /* Tema verde (RE4 vibe) */
+    #music-widget.theme-green {
+      background:
+        repeating-linear-gradient(45deg, rgba(0,255,120,.16) 0 10px, rgba(0,255,120,0) 10px 20px),
+        linear-gradient(180deg, rgba(8,48,28,.92), rgba(4,28,18,.92));
+      box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 28px rgba(0,255,140,.18);
+    }
+    /* Tema âmbar (RE7 vibe) */
+    #music-widget.theme-amber {
+      background:
+        repeating-linear-gradient(45deg, rgba(255,200,0,.14) 0 10px, rgba(255,200,0,0) 10px 20px),
+        linear-gradient(180deg, rgba(60,42,0,.92), rgba(32,20,0,.92));
+      box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 28px rgba(255,200,0,.18);
+    }
+    /* Tema roxo (SNAS vibe) */
+    #music-widget.theme-purple {
+      background:
+        repeating-linear-gradient(45deg, rgba(255,0,255,.16) 0 10px, rgba(255,0,255,0) 10px 20px),
+        linear-gradient(180deg, rgba(50,0,80,.92), rgba(26,0,52,.92));
+      box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 28px rgba(200,0,255,.2);
+    }
+    /* Tema índigo (Vergil vibe) */
+    #music-widget.theme-indigo {
+      background:
+        repeating-linear-gradient(45deg, rgba(120,180,255,.16) 0 10px, rgba(120,180,255,0) 10px 20px),
+        linear-gradient(180deg, rgba(18,26,64,.92), rgba(10,14,40,.92));
+      box-shadow: 0 12px 32px rgba(0,0,0,.45), 0 0 28px rgba(120,180,255,.22);
+    }
+    /* Animação de entrada do player no menu */
+    @keyframes widgetIn {
+      0% { opacity: 0; transform: translateY(-12px) scale(.94); filter: blur(2px); }
+      60% { opacity: 1; transform: translateY(4px) scale(1.02); filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: none; }
+    }
+    #music-widget.widget-enter { animation: widgetIn .7s cubic-bezier(.16,.84,.44,1) forwards; }
+    #music-widget img { display:none; }
+    @keyframes gentleFloat {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-6px); }
+    }
+  #music-widget .meta { display:none; }
+  #music-widget .controls { display: flex; gap: 6px; align-items: center; }
+  #music-widget .time { display:none; }
+    #music-progress {
+      display:none; /* manter o controle oculto no layout tímido */
+    }
+    #music-progress::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; }
+    #music-widget .btn { padding: 6px 10px; border: 3px solid white; border-radius: 10px; background: black; color: white; cursor: pointer; transition: .15s; }
+    #music-widget .btn:hover { background: white; color: black; }
+    #music-volume {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 140px;
+      height: 8px;
+      background: rgba(255,255,255,.2);
+      border: 2px solid white;
+      border-radius: 10px;
+      outline: none;
+    }
+  /* #music-next is visible for testing next track */
+    #music-volume::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px; height: 14px; background: white; border-radius: 50%; cursor: pointer; border: 2px solid black;
+    }
+    /* Toggle (disco) */
+    #music-toggle {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      width: 52px;
+      height: 52px;
+      border: 3px solid white;
+      border-radius: 50%;
+      background: black;
+      color: white;
+      box-shadow: 0 10px 28px rgba(0,0,0,.45);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, opacity .18s ease, background .2s ease;
+      z-index: 6;
+      user-select: none;
+      line-height: 1;
+      font-size: 24px;
+    }
+    #music-toggle:hover { transform: translateY(-1px) scale(1.03); }
+    @keyframes spinDisc { to { transform: rotate(360deg); } }
+    #music-toggle.spinning { animation: spinDisc 6s linear infinite; }
+    /* Themes applied to toggle via box shadows */
+    #music-toggle.theme-red { box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(255,0,120,.28); }
+    #music-toggle.theme-blue { box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(0,180,255,.28); }
+    #music-toggle.theme-green { box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(0,255,140,.26); }
+    #music-toggle.theme-amber { box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(255,200,0,.28); }
+    #music-toggle.theme-purple { box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(200,0,255,.28); }
+    #music-toggle.theme-indigo { box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 22px rgba(120,180,255,.28); }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div id="loading-text"></div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+      <img id="flash-logo" src="assets/logo.jpg" alt="Logo">
+    </div>
+    <div class="progress-text" id="progress-text">0%</div>
+  </div>
+
+  <div id="menu">
+    <h1>MENU PRINCIPAL</h1>
+    <button>engajados</button>
+    <button>comunidade</button>
+    <button>apoie o canal</button>
+    <button>FAQ</button>
+  </div>
+
+  <!-- Card de conteúdo que abre após a seleção -->
+  <div id="content-card" style="display:none; position:fixed; top:50%; left:50%; transform: translate(-50%, -50%) scale(.9); background: rgba(15,15,15,.96); border: 4px solid white; border-radius: 18px; width: min(90vw, 1100px); min-width: 540px; min-height: 50vh; padding: 40px 48px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.6); z-index:3; animation: popup .6s forwards;">
+    <h2 id="content-title" style="margin-top:0; margin-bottom: 18px; font-size: clamp(1.8rem, 4vw, 3rem); color: red; text-shadow: 0 0 10px red, 0 0 24px rgba(255,255,255,.35);"></h2>
+    <div id="content-body" style="font-size: clamp(1rem, 2.2vw, 1.6rem); line-height: 1.5; opacity:.95;"></div>
+    <button id="back-btn" style="margin-top: 26px;">
+      voltar
+    </button>
+  </div>
+
+  <!-- Card de detalhes (nível 2) -->
+  <div id="detail-card" style="display:none; position:fixed; top:50%; left:50%; transform: translate(-50%, -50%) scale(.9); background: rgba(12,12,12,.97); border: 4px solid white; border-radius: 18px; width: min(92vw, 1100px); min-width: 540px; min-height: 50vh; padding: 34px 44px; text-align: center; box-shadow: 0 24px 70px rgba(0,0,0,.65); z-index:4; animation: popup .6s forwards;">
+    <h2 id="detail-title" style="margin-top:0; margin-bottom: 16px; font-size: clamp(1.8rem, 4vw, 3rem); color: red; text-shadow: 0 0 10px red, 0 0 24px rgba(255,255,255,.35);"></h2>
+    <div id="detail-body" style="font-size: clamp(1rem, 2.2vw, 1.6rem); line-height: 1.5; opacity:.95;"></div>
+    <button id="detail-back-btn" style="margin-top: 22px;">voltar</button>
+  </div>
+
+  <!-- Card de explicação do ranking -->
+  <div id="info-card" style="display:none; position:fixed; top:50%; left:50%; transform: translate(-50%, -50%) scale(.9); background: rgba(10,10,10,.98); border: 4px solid white; border-radius: 18px; width: min(92vw, 980px); min-width: 520px; min-height: 40vh; padding: 34px 44px; text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,.7); z-index:5; animation: popup .6s forwards;">
+    <h2 id="info-title" style="margin-top:0; margin-bottom: 16px; font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: red; text-shadow: 0 0 10px red, 0 0 24px rgba(255,255,255,.35);">COMO O RANKING FUNCIONA?</h2>
+    <div id="info-body" style="font-size: clamp(1rem, 2.2vw, 1.4rem); line-height: 1.6; text-align:left; max-height: 52vh; overflow-y:auto; margin: 0 auto; max-width: 820px;">
+    </div>
+    <button id="info-back-btn" style="margin-top: 22px;">voltar</button>
+  </div>
+
+  <!-- Áudio e player Miside -->
+  <audio id="bg-audio" src="assets/miside.m4a" preload="auto"></audio>
+  <!-- Botão do player (disco) -->
+  <button id="music-toggle" style="display:none;" aria-label="abrir player">💿</button>
+  <div id="music-widget" style="display:none;">
+    <div class="controls">
+      <button id="music-pause" class="btn">pause</button>
+      <button id="music-stop" class="btn">stop</button>
+      <button id="music-next" class="btn">próxima</button>
+    </div>
+    <div class="volume" style="display:flex; align-items:center; gap:8px;">
+      <input type="range" id="music-volume" min="0" max="100" value="70" />
+    </div>
+    <span class="time" id="music-time" style="display:none;">00:00 / 00:00</span>
+    <input type="range" id="music-progress" min="0" max="100" value="0" style="display:none;" />
+  </div>
+
+  <script>
+  const text = "carregando";
+    const container = document.getElementById("loading-text");
+
+    // Criar letras com delay e remover a letra de duas posições atrás após aparecer
+    const delayPerChar = 0.35; // segundos
+    const appearDur = 1.0;     // segundos (deve coincidir com @keyframes throwIn)
+    const spans = [];
+    text.split("").forEach((char, i) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.classList.add("letter");
+      span.style.animationDelay = `${i * delayPerChar}s`;
+      spans.push(span);
+      container.appendChild(span);
+
+      // Quando esta letra concluir sua animação de entrada,
+      // apague (com fade) a letra de duas posições atrás.
+      const totalDelayMs = (i * delayPerChar + appearDur) * 1000;
+      setTimeout(() => {
+        const idxToHide = i - 2;
+        if (idxToHide >= 0 && spans[idxToHide]) {
+          spans[idxToHide].classList.add('fade-away');
+        }
+      }, totalDelayMs);
+    });
+
+    // Quando as duas últimas letras ("do") terminarem de aparecer,
+    // agende suas remoções para manter o mesmo padrão de sumir após 2 novas letras.
+    const lastIndex = spans.length - 1;
+    const lastAppearMs = ((lastIndex * delayPerChar) + appearDur) * 1000;
+    // Remover penúltima
+    setTimeout(() => {
+      const idx = lastIndex - 1;
+      if (idx >= 0 && spans[idx]) spans[idx].classList.add('fade-away');
+    }, lastAppearMs + (delayPerChar * 1000));
+    // Remover última
+    setTimeout(() => {
+      if (spans[lastIndex]) spans[lastIndex].classList.add('fade-away');
+    }, lastAppearMs + (2 * delayPerChar * 1000));
+
+    // Após a última desaparecer, exibir o logo rapidamente com fade-in/out sobre a barra
+    const flashLogo = document.getElementById('flash-logo');
+    const logoStart = lastAppearMs + (2 * delayPerChar * 1000) + 500; // +500ms (tempo do fade-out)
+    setTimeout(() => {
+      if (flashLogo) {
+        flashLogo.classList.remove('flash-run'); // reset caso recarregue rápido
+        void flashLogo.offsetWidth; // reflow para reiniciar animação
+        flashLogo.classList.add('flash-run');
+      }
+    }, logoStart);
+
+    // Barra de progresso
+  const progressBar = document.getElementById("progress-bar");
+  const progressText = document.getElementById("progress-text");
+
+  // Inicia música durante o carregamento com volume ainda mais baixo e player oculto
+  initBackgroundMusic({ initialVolume: 0.05, showWidget: false });
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 1;
+      progressBar.style.width = progress + "%";
+      progressText.textContent = progress + "%";
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          document.getElementById("loading").style.display = "none";
+          const menu = document.getElementById("menu");
+          menu.style.display = "block";
+          // Inicializa posição salva (se existir) e arrasto com inércia
+          initDraggableMenu(menu);
+          // Inicializa efeito de escala por proximidade no hover
+          initMenuHoverScaling(menu);
+          // Inicializa animação de seleção de opções
+          initMenuSelection(menu);
+          // Aplica estado bloqueado da Comunidade, se existir
+          applyCommunityLockStyles();
+          // Mostra o disco (toggle) e ajusta volume escolhido pelo usuário somente no menu
+          musicShowToggleAndSetVolume(getSavedVolume(), 900);
+        }, 500);
+      }
+    }, 100); // 100ms * 100 = 10 segundos
+
+    // ===== Drag com atraso (inércia) + salvar posição =====
+    function initDraggableMenu(menu){
+      const saved = loadSavedMenuPos();
+      let rect = menu.getBoundingClientRect();
+      if (saved) {
+        // Converter para modo livre e aplicar posição salva
+        menu.classList.add('free');
+        menu.style.left = clamp(saved.x, 0, window.innerWidth - rect.width) + 'px';
+        menu.style.top  = clamp(saved.y, 0, window.innerHeight - rect.height) + 'px';
+        rect = menu.getBoundingClientRect();
+      }
+
+      let dragging = false;
+      let offsetX = 0, offsetY = 0;
+      let targetX = rect.left, targetY = rect.top;
+      let currentX = targetX, currentY = targetY;
+      let rafId = 0;
+
+      function onPointerDown(e){
+        if (menu.classList.contains('selecting')) return; // bloqueia arrasto durante seleção
+        // Não iniciar drag ao clicar em botões do menu (para não capturar o clique)
+        if (e.target && (e.target.tagName === 'BUTTON' || e.target.closest('button'))) return;
+        dragging = true;
+        menu.setPointerCapture(e.pointerId);
+        const r = menu.getBoundingClientRect();
+        // Se ainda não está em modo livre (centralizado), fixa posição atual em px e entra no modo livre
+        if (!menu.classList.contains('free')){
+          menu.style.left = r.left + 'px';
+          menu.style.top  = r.top + 'px';
+          menu.classList.add('free');
+        }
+        offsetX = e.clientX - r.left;
+        offsetY = e.clientY - r.top;
+        targetX = r.left; targetY = r.top;
+        currentX = targetX; currentY = targetY;
+        menu.classList.add('dragging');
+        if (!rafId) rafId = requestAnimationFrame(follow);
+      }
+
+      function onPointerMove(e){
+        if (!dragging) return;
+        const maxX = window.innerWidth - menu.offsetWidth;
+        const maxY = window.innerHeight - menu.offsetHeight;
+        targetX = clamp(e.clientX - offsetX, 0, Math.max(0, maxX));
+        targetY = clamp(e.clientY - offsetY, 0, Math.max(0, maxY));
+      }
+
+      function onPointerUp(e){
+        dragging = false;
+        try { menu.releasePointerCapture(e.pointerId); } catch {}
+        menu.classList.remove('dragging');
+        // salva posição final após uma pequena pausa para convergir
+        setTimeout(() => saveMenuPos(currentX, currentY), 120);
+      }
+
+      function follow(){
+        // inércia/atraso
+        currentX += (targetX - currentX) * 0.18;
+        currentY += (targetY - currentY) * 0.18;
+        menu.style.left = currentX + 'px';
+        menu.style.top  = currentY + 'px';
+        if (dragging) {
+          rafId = requestAnimationFrame(follow);
+        } else {
+          rafId = 0;
+        }
+      }
+
+      // Reencaixa se a janela mudar de tamanho
+      window.addEventListener('resize', () => {
+        const maxX = window.innerWidth - menu.offsetWidth;
+        const maxY = window.innerHeight - menu.offsetHeight;
+        const x = clamp(currentX, 0, Math.max(0, maxX));
+        const y = clamp(currentY, 0, Math.max(0, maxY));
+        currentX = x; currentY = y; targetX = x; targetY = y;
+        menu.style.left = x + 'px';
+        menu.style.top  = y + 'px';
+        saveMenuPos(x, y);
+      });
+
+      menu.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+    }
+
+    function clamp(v, min, max){ return Math.min(Math.max(v, min), max); }
+    function saveMenuPos(x,y){ try { localStorage.setItem('menuPos', JSON.stringify({x: Math.round(x), y: Math.round(y)})); } catch {} }
+    function loadSavedMenuPos(){ try { return JSON.parse(localStorage.getItem('menuPos')||'null'); } catch { return null; } }
+
+    // ===== Comunidade: estado de bloqueio e UI =====
+    function setCommunityLocked(val){ try { localStorage.setItem('communityLocked', val ? '1' : '0'); } catch {} }
+    function isCommunityLocked(){ try { return localStorage.getItem('communityLocked') === '1'; } catch { return false; } }
+    function getCommunityClicks(){ try { return parseInt(localStorage.getItem('communityClicks')||'0', 10) || 0; } catch { return 0; } }
+    function incCommunityClicks(){ const n = getCommunityClicks() + 1; try { localStorage.setItem('communityClicks', String(n)); } catch {} return n; }
+    function resetCommunityClicks(){ try { localStorage.setItem('communityClicks','0'); } catch {} }
+    function markCommunityRemoved(){ try { localStorage.setItem('communityRemoved','1'); } catch {} }
+    function isCommunityRemoved(){ try { return localStorage.getItem('communityRemoved') === '1'; } catch { return false; } }
+
+    function applyCommunityLockStyles(){
+      const menu = document.getElementById('menu');
+      if (!menu) return;
+      const btn = Array.from(menu.querySelectorAll('button')).find(b => b.textContent.trim().toLowerCase() === 'comunidade');
+      if (!btn) return;
+      if (isCommunityRemoved()) {
+        // Se já foi removido permanentemente, oculte se ainda existir
+        btn.style.transition = 'opacity 1s ease, height 1s ease, margin 1s ease, padding 1s ease, border-width 1s ease';
+        btn.style.opacity = '0';
+        btn.style.height = '0px';
+        btn.style.marginTop = '0px';
+        btn.style.marginBottom = '0px';
+        btn.style.paddingTop = '0px';
+        btn.style.paddingBottom = '0px';
+        btn.style.borderWidth = '0px';
+        btn.style.pointerEvents = 'none';
+        setTimeout(() => { btn.style.display = 'none'; }, 1100);
+        return;
+      }
+      if (isCommunityLocked()){
+        btn.style.color = 'red';
+        btn.style.borderColor = 'red';
+        btn.style.textShadow = '0 0 10px red, 0 0 24px rgba(255,0,0,.35)';
+      }
+    }
+
+    function removeCommunityButtonSlowly(){
+      const menu = document.getElementById('menu');
+      if (!menu) return;
+      const btn = Array.from(menu.querySelectorAll('button')).find(b => b.textContent.trim().toLowerCase() === 'comunidade');
+      if (!btn) return;
+      // Anima colapso suave
+      btn.style.transition = 'opacity 1.4s ease, height 1.4s ease, margin 1.4s ease, padding 1.4s ease, border-width 1.4s ease';
+      btn.style.opacity = '0';
+      btn.style.height = '0px';
+      btn.style.marginTop = '0px';
+      btn.style.marginBottom = '0px';
+      btn.style.paddingTop = '0px';
+      btn.style.paddingBottom = '0px';
+      btn.style.borderWidth = '0px';
+      btn.style.pointerEvents = 'none';
+      setTimeout(() => { btn.style.display = 'none'; markCommunityRemoved(); }, 1500);
+    }
+
+    function launchGeneralKnowledgeChallenge(onDone){
+      // Cria card simples com uma pergunta genérica
+      let card = document.getElementById('challenge-card');
+      if (!card){
+        card = document.createElement('div');
+        card.id = 'challenge-card';
+        card.style.position = 'fixed';
+        card.style.top = '50%';
+        card.style.left = '50%';
+        card.style.transform = 'translate(-50%, -50%) scale(.9)';
+        card.style.background = 'rgba(12,12,12,.97)';
+        card.style.border = '4px solid white';
+        card.style.borderRadius = '18px';
+        card.style.width = 'min(92vw, 720px)';
+        card.style.minWidth = '520px';
+        card.style.padding = '28px 36px';
+        card.style.textAlign = 'center';
+        card.style.boxShadow = '0 24px 70px rgba(0,0,0,.65)';
+        card.style.zIndex = '100000';
+        card.style.opacity = '0';
+        card.style.transition = 'opacity .25s ease, transform .25s ease';
+        card.innerHTML = `
+          <h2 style="margin-top:0; margin-bottom: 14px; font-size: clamp(1.4rem, 3.2vw, 2.2rem); color: red; text-shadow: 0 0 10px red, 0 0 24px rgba(255,255,255,.35);">DESAFIO RELÂMPAGO</h2>
+          <div id="challenge-body" style="font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.5; opacity:.95; margin-bottom: 14px;"></div>
+          <input id="challenge-input" placeholder="sua resposta" style="width:100%; padding: 12px 14px; border:3px solid white; border-radius: 10px; background:black; color:white;" />
+          <button id="challenge-submit" style="margin-top: 16px; width:100%;">responder</button>
+        `;
+        document.body.appendChild(card);
+      }
+      const questions = [
+        'Qual é a capital do Brasil?',
+        'Quantos continentes existem no mundo?',
+        'Quem pintou a Mona Lisa?',
+        'Em que ano o homem chegou à Lua?',
+        'Qual é o maior oceano da Terra?'
+      ];
+      const q = questions[Math.floor(Math.random()*questions.length)];
+      const body = card.querySelector('#challenge-body');
+      const input = card.querySelector('#challenge-input');
+      const submit = card.querySelector('#challenge-submit');
+      body.textContent = q;
+      input.value = '';
+
+      requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translate(-50%, -50%) scale(1)'; });
+
+      function close(){
+        card.style.opacity = '0';
+        card.style.transform = 'translate(-50%, -50%) scale(.9)';
+        setTimeout(() => { try { card.remove(); } catch {} }, 220);
+      }
+
+      submit.onclick = () => { close(); if (typeof onDone === 'function') onDone(); };
+      input.onkeydown = (e) => { if (e.key === 'Enter') { submit.onclick(); } };
+    }
+
+    // ===== Hover: botão maior e vizinhos menores =====
+    function initMenuHoverScaling(menu){
+      const buttons = Array.from(menu.querySelectorAll('button'));
+      if (!buttons.length) return;
+
+      function applyScales(hoverIndex){
+        buttons.forEach((btn, i) => {
+          const d = Math.abs(i - hoverIndex);
+          let scale = 1;
+          if (d === 0) scale = 1.12;      // foco: maior
+          else if (d === 1) scale = 0.88; // vizinhos próximos: menores
+          else scale = 1.0;               // demais: normal
+          btn.style.setProperty('--scale', scale);
+        });
+      }
+
+      function resetScales(){
+        buttons.forEach(btn => btn.style.setProperty('--scale', 1));
+      }
+
+      // Eventos de entrada no botão (mouse e foco via teclado)
+      buttons.forEach((btn, index) => {
+        btn.addEventListener('mouseenter', () => applyScales(index));
+        btn.addEventListener('focus', () => applyScales(index));
+      });
+      // Ao sair do menu com o mouse ou perder foco geral, reseta
+      menu.addEventListener('mouseleave', resetScales);
+      menu.addEventListener('focusout', (e) => {
+        // Se o foco saiu do menu inteiro
+        if (!menu.contains(document.activeElement)) resetScales();
+      });
+    }
+
+    // ===== Seleção: glitch no item, fade-out e abre card de conteúdo =====
+    function initMenuSelection(menu){
+      const title = menu.querySelector('h1');
+      const buttons = Array.from(menu.querySelectorAll('button'));
+      if (!title || !buttons.length) return;
+      let animating = false;
+      const contentCard = document.getElementById('content-card');
+      const contentTitle = document.getElementById('content-title');
+      const contentBody = document.getElementById('content-body');
+      const backBtn = document.getElementById('back-btn');
+
+      function onChoose(btn){
+        if (animating) return;
+        const choiceTxt = btn.textContent.trim().toLowerCase();
+        // Se a comunidade estiver bloqueada, treme o botão e não entra.
+        if (choiceTxt === 'comunidade' && isCommunityLocked() && !isCommunityRemoved()){
+          const count = incCommunityClicks();
+          // retrigger tremida
+          btn.classList.remove('shake');
+          void btn.offsetWidth;
+          btn.classList.add('shake');
+          if (count >= 10){
+            // Lança desafio e, ao concluir, remove a opção lentamente
+            launchGeneralKnowledgeChallenge(() => {
+              removeCommunityButtonSlowly();
+            });
+          }
+          return;
+        }
+        animating = true;
+        menu.classList.add('selecting');
+
+        // neutraliza efeitos de hover/escala nos botões
+        buttons.forEach(b => { b.style.setProperty('--scale','1'); b.style.setProperty('--ty','0px'); });
+
+        // Fade-out no título e nos outros botões (sem mover)
+        buttons.forEach(b => { if (b !== btn) b.classList.add('fade-out-quick'); });
+        title.classList.add('fade-out-quick');
+
+        // Glitch na escolhida por um tempo e depois fade-out
+        btn.classList.add('selected-glitch','glitching');
+        setTimeout(() => {
+          btn.classList.remove('glitching');
+          btn.classList.add('fade-out-quick');
+        }, 900);
+
+        // Após fade, esconde menu e abre o card de conteúdo
+        setTimeout(() => {
+          // esconder menu inteiro
+          menu.style.display = 'none';
+          menu.classList.remove('selecting');
+          // limpa classes e estilos para quando voltar
+          [title, ...buttons].forEach(el => {
+            el.classList.remove('fade-out-quick','glitching','selected-glitch','fly-left','fly-right','fly-up','fly-down','fly-upleft','fly-upright','fly-downleft','fly-downright');
+            el.style.removeProperty('transform');
+            el.style.removeProperty('color');
+            el.style.removeProperty('text-shadow');
+            el.style.display = '';
+          });
+
+          // Abre o card de conteúdo conforme a opção
+          const choice = choiceTxt;
+          openContent(choice);
+          animating = false;
+        }, 1250);
+      }
+
+      buttons.forEach(b => b.addEventListener('click', () => onChoose(b)));
+
+  function openContent(choice){
+        // Define título e conteúdo baseados na opção
+        switch (choice) {
+          case 'engajados':
+            contentTitle.textContent = 'ENGAJADOS';
+            renderEngajadosMenu();
+            break;
+          case 'comunidade':
+            contentTitle.textContent = 'COMUNIDADE';
+            renderCommunityChat();
+            break;
+          case 'apoie o canal':
+            contentTitle.textContent = 'APOIE O CANAL';
+            renderSupportMenu();
+            break;
+          case 'faq':
+            contentTitle.textContent = 'FAQ';
+            contentBody.innerHTML = 'Perguntas frequentes, tutoriais rápidos e suporte.';
+            break;
+          default:
+            contentTitle.textContent = choice.toUpperCase();
+            contentBody.textContent = 'Conteúdo em breve.';
+        }
+        if (isRE7Mode()) doorOpenElement(contentCard); else contentCard.style.display = 'block';
+      }
+
+      function renderCommunityChat(){
+        const channels = [
+          { id: 'geral', label: '#geral' },
+          { id: 'memes', label: '#memes' },
+          { id: 'clips', label: '#clips' },
+          { id: 'off', label: '#off-topic' },
+          { id: 'sugestoes', label: '#sugestoes' },
+          { id: 'anuncios', label: '#anuncios' }
+        ];
+
+        // Layout estilo Discord: lateral esquerda com canais, direita com área de chat
+        contentBody.innerHTML = `
+          <div id="community-wrap" style="display:flex; gap:16px; min-height: 48vh;">
+            <aside id="community-sidebar" style="width: 260px; min-width: 220px; border: 3px solid white; border-radius: 12px; padding: 16px; background: rgba(0,0,0,.6);">
+              <div style="font-size: clamp(1rem, 2vw, 1.3rem); opacity:.9; margin-bottom: 10px; text-align:left;">Canais</div>
+              <div id="channel-list"></div>
+            </aside>
+            <section id="community-chat" style="flex:1; border: 3px solid white; border-radius: 12px; padding: 16px; background: rgba(0,0,0,.6); display:flex; flex-direction: column;">
+              <div id="channel-header" style="font-size: clamp(1.1rem, 2.2vw, 1.6rem); margin-bottom: 10px; text-align:left; opacity:.95;">Selecione um canal</div>
+              <div id="chat-scroll" style="flex:1; overflow-y:auto; border: 2px dashed rgba(255,255,255,.25); border-radius: 10px; padding: 12px;"></div>
+              <div style="margin-top: 10px; opacity:.5; font-size: clamp(.9rem, 1.8vw, 1.1rem); text-align:left;">mensagens novas em breve…</div>
+            </section>
+          </div>
+        `;
+
+        const list = contentBody.querySelector('#channel-list');
+        list.innerHTML = channels.map((c, i) => `
+          <button class="channel-btn" data-id="${c.id}" style="display:block; width:100%; text-align:left; margin:8px 0; padding:12px 14px; border:3px solid white; border-radius:10px; background:black; color:white; transition:.2s;">
+            ${c.label}
+          </button>
+        `).join('');
+
+        const header = contentBody.querySelector('#channel-header');
+        const chat = contentBody.querySelector('#chat-scroll');
+
+        const btns = Array.from(list.querySelectorAll('.channel-btn'));
+        // Aplica leve scaling como no menu
+        initSubmenuHoverScaling(list);
+
+        let typingTimer = null;
+        let redirectTimer = null;
+
+        function clearTimers(){
+          if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
+          if (redirectTimer) { clearTimeout(redirectTimer); redirectTimer = null; }
+        }
+
+        function renderMessagesFor(channelId){
+          const msgs = [
+            { who: 'mod', text: 'Bem-vindos ao canal!', time: 'agora' },
+            { who: 'user_42', text: 'Ansioso para as novidades 🔥', time: 'há 1 min' },
+            { who: 'nevext', text: 'Fica por aqui que tem coisa boa chegando.', time: 'há 2 min' }
+          ];
+          chat.innerHTML = msgs.map(m => `
+            <div style="margin: 10px 0; display:flex; gap:10px;">
+              <div style="width:36px; height:36px; border:3px solid white; border-radius:50%; display:grid; place-items:center; font-size:.9rem; background:black;">${m.who[0].toUpperCase()}</div>
+              <div style="flex:1;">
+                <div style="opacity:.85;">${m.who} <span style="opacity:.6; font-size:.9em;">• ${m.time}</span></div>
+                <div style="margin-top: 4px;">${m.text}</div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        function showShyMessageAndReturnHome(){
+          // Cria (ou reutiliza) a mensagem tímida no canto
+          let tip = document.getElementById('shy-msg');
+          if (!tip){
+            tip = document.createElement('div');
+            tip.id = 'shy-msg';
+            tip.style.position = 'fixed';
+            tip.style.bottom = '16px';
+            tip.style.right = '16px';
+            tip.style.maxWidth = '62vw';
+            tip.style.background = 'rgba(255,255,255,.97)';
+            tip.style.color = 'black';
+            tip.style.border = '3px solid white';
+            tip.style.borderRadius = '12px';
+            tip.style.padding = '10px 14px';
+            tip.style.boxShadow = '0 10px 30px rgba(0,0,0,.4)';
+            tip.style.opacity = '0';
+            tip.style.transform = 'translateY(8px)';
+            tip.style.transition = 'opacity .25s ease, transform .25s ease';
+            tip.style.zIndex = '99999';
+            document.body.appendChild(tip);
+          }
+
+          const fullText = 'EI esa parte ainda não esta pronta, volte em breve';
+          tip.textContent = '';
+          requestAnimationFrame(() => { tip.style.opacity = '1'; tip.style.transform = 'translateY(0)'; });
+
+          let i = 0;
+          typingTimer = setInterval(() => {
+            tip.textContent = fullText.slice(0, i + 1);
+            i++;
+            if (i >= fullText.length) {
+              clearInterval(typingTimer); typingTimer = null;
+              // Após digitar tudo, aguarda e volta ao menu principal
+              redirectTimer = setTimeout(() => {
+                const contentCard = document.getElementById('content-card');
+                const menu = document.getElementById('menu');
+                contentCard.style.display = 'none';
+                menu.style.display = 'block';
+                // Marcar comunidade como bloqueada e aplicar aparência
+                setCommunityLocked(true);
+                resetCommunityClicks();
+                applyCommunityLockStyles();
+                // remove a mensagem tímida
+                try { tip.remove(); } catch {}
+              }, 900);
+            }
+          }, 45);
+        }
+
+        btns.forEach(btn => btn.addEventListener('click', () => {
+          clearTimers();
+          // estado ativo
+          btns.forEach(b => { b.style.background = 'black'; b.style.color = 'white'; });
+          btn.style.background = 'white'; btn.style.color = 'black';
+          const id = btn.getAttribute('data-id');
+          const channel = channels.find(c => c.id === id);
+          header.textContent = channel ? channel.label : '#canal';
+          renderMessagesFor(id);
+          // Deixa ver por pouco tempo, depois mostra mensagem tímida e volta
+          setTimeout(() => showShyMessageAndReturnHome(), 1600);
+        }));
+      }
+
+      function renderSupportMenu(){
+        const options = [
+          'Mandar Pix',
+          'Ver as contribuições'
+        ];
+        const btns = options.map(txt => `<button class="submenu-btn">${txt}</button>`).join('');
+        contentBody.innerHTML = `<div class="submenu" style="max-width: 700px; margin: 0 auto;">${btns}</div>`;
+        const submenu = contentBody.querySelector('.submenu');
+        initSubmenuHoverScaling(submenu);
+
+        // Seleção com glitch + fade, então abre o card correspondente
+        const buttons = Array.from(submenu.querySelectorAll('button'));
+        const titleEl = document.getElementById('content-title');
+        let animating = false;
+        buttons.forEach(btn => btn.addEventListener('click', () => {
+          if (animating) return;
+          animating = true;
+          buttons.forEach(b => { if (b !== btn) b.classList.add('fade-out-quick'); });
+          titleEl.classList.add('fade-out-quick');
+          btn.classList.add('selected-glitch','glitching');
+          setTimeout(() => { btn.classList.remove('glitching'); btn.classList.add('fade-out-quick'); }, 900);
+          setTimeout(() => {
+            const choice = btn.textContent.trim().toLowerCase();
+            if (choice === 'mandar pix') openPixCard();
+            else openContributionsCard();
+            animating = false;
+          }, 1250);
+        }));
+      }
+
+  function openPixCard(){
+        const detailCard = document.getElementById('detail-card');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('detail-body');
+        const backBtn = document.getElementById('detail-back-btn');
+
+        titleEl.textContent = 'MANDAR PIX';
+
+        const fakeKey = 'pix-chave-simulada-123e4567-e89b-12d3-a456-426614174000@bank.com';
+
+        bodyEl.innerHTML = `
+          <div style="max-width: 720px; margin: 0 auto; text-align:left; display:grid; gap:12px;">
+            <div>Use a chave PIX abaixo para apoiar. (simulação)</div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="pix-key" value="${fakeKey}" readonly style="flex:1; padding: 12px 14px; border:3px solid white; border-radius:10px; background:black; color:white;" />
+              <button id="copy-key" style="white-space:nowrap;">copiar</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="pix-amount" type="number" min="1" step="1" value="10" style="width:160px; padding: 12px 14px; border:3px solid white; border-radius:10px; background:black; color:white;" />
+              <button id="send-pix" style="flex:1;">simular envio</button>
+            </div>
+            <div id="pix-status" style="min-height: 24px; opacity:.9;"></div>
+          </div>
+        `;
+
+        const copyBtn = bodyEl.querySelector('#copy-key');
+        const amountEl = bodyEl.querySelector('#pix-amount');
+        const sendBtn = bodyEl.querySelector('#send-pix');
+        const status = bodyEl.querySelector('#pix-status');
+        const keyInput = bodyEl.querySelector('#pix-key');
+
+        copyBtn.onclick = async () => {
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(keyInput.value);
+            } else {
+              keyInput.select(); document.execCommand('copy');
+            }
+            status.textContent = 'chave copiada!';
+          } catch {
+            status.textContent = 'não foi possível copiar, copie manualmente.';
+          }
+        };
+
+        sendBtn.onclick = () => {
+          const v = parseFloat(amountEl.value || '0');
+          if (!v || v <= 0) { status.textContent = 'informe um valor válido'; return; }
+          status.textContent = 'processando…';
+          setTimeout(() => {
+            status.textContent = `obrigado por apoiar (simulado) • R$ ${v.toFixed(2)}`;
+          }, 700);
+        };
+
+        if (isRE7Mode()) doorOpenElement(detailCard); else detailCard.style.display = 'block';
+        backBtn.onclick = () => {
+          const goBack = () => { renderSupportMenu(); };
+          if (isRE7Mode()) doorCloseElement(detailCard, goBack); else { detailCard.style.display = 'none'; goBack(); }
+        };
+      }
+
+  function openContributionsCard(){
+        const detailCard = document.getElementById('detail-card');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('detail-body');
+        const backBtn = document.getElementById('detail-back-btn');
+
+        titleEl.textContent = 'CONTRIBUIÇÕES';
+
+        // Simula 100 contribuições
+        const total = 100;
+        const all = Array.from({length: total}, (_, i) => ({
+          name: `Apoiador_${(i+1).toString().padStart(3,'0')}`,
+          amount: (Math.round((Math.random()*95 + 5)*100)/100),
+          date: new Date(Date.now() - i*86400000)
+        }));
+        let shown = 20;
+
+        function fmt(d){
+          const dd = d.getDate().toString().padStart(2,'0');
+          const mm = (d.getMonth()+1).toString().padStart(2,'0');
+          const yy = d.getFullYear();
+          return `${dd}/${mm}/${yy}`;
+        }
+
+        bodyEl.innerHTML = `
+          <div class="contrib-wrap" style="max-width: 860px; margin: 0 auto; text-align:left;">
+            <div id="contrib-list" style="max-height: 50vh; overflow-y: auto; padding-right: 6px;"></div>
+            <button id="see-more-contrib" style="margin-top: 12px; width: 100%;">ver mais</button>
+          </div>
+        `;
+
+        const listEl = bodyEl.querySelector('#contrib-list');
+        const seeMore = bodyEl.querySelector('#see-more-contrib');
+
+        function renderList(){
+          const items = all.slice(0, shown).map((c, idx) => {
+            const val = c.amount.toFixed(2).replace('.', ',');
+            return `<button class="contrib-item" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding-top:14px; padding-bottom:14px;">
+                      <span style=\"opacity:.7; min-width: 48px; text-align:right;\">#${idx+1}</span>
+                      <span style=\"flex:1;\"><strong>${c.name}</strong> — R$ ${val} • ${fmt(c.date)}</span>
+                    </button>`;
+          }).join('');
+          listEl.innerHTML = items;
+          initSubmenuHoverScaling(listEl);
+        }
+
+        renderList();
+        seeMore.onclick = () => { shown = Math.min(shown + 20, total); renderList(); if (shown >= total) seeMore.style.display = 'none'; };
+
+        if (isRE7Mode()) doorOpenElement(detailCard); else detailCard.style.display = 'block';
+        backBtn.onclick = () => {
+          const goBack = () => { renderSupportMenu(); };
+          if (isRE7Mode()) doorCloseElement(detailCard, goBack); else { detailCard.style.display = 'none'; goBack(); }
+        };
+      }
+
+      function renderEngajadosMenu(){
+        const options = [
+          'Ranking de engajamentos',
+          'Comentários em destaque',
+          'Desafios',
+          'Sorteios',
+          'Pontos extras para o engajamento'
+        ];
+        const btns = options.map(txt => `<button class="submenu-btn">${txt}</button>`).join('');
+        contentBody.innerHTML = `<div class="submenu" style="max-width: 700px; margin: 0 auto;">${btns}</div>`;
+        const submenu = contentBody.querySelector('.submenu');
+        initSubmenuHoverScaling(submenu);
+        initSubmenuSelection(submenu);
+      }
+
+      function initSubmenuHoverScaling(container){
+        const buttons = Array.from(container.querySelectorAll('button'));
+        if (!buttons.length) return;
+        function applyScales(hoverIndex){
+          buttons.forEach((btn, i) => {
+            const d = Math.abs(i - hoverIndex);
+            let scale = 1;
+            if (d === 0) scale = 1.12;
+            else if (d === 1) scale = 0.88;
+            else scale = 1.0;
+            btn.style.setProperty('--scale', scale);
+          });
+        }
+        function resetScales(){ buttons.forEach(btn => btn.style.setProperty('--scale', 1)); }
+        buttons.forEach((btn, index) => {
+          btn.addEventListener('mouseenter', () => applyScales(index));
+          btn.addEventListener('focus', () => applyScales(index));
+        });
+        container.addEventListener('mouseleave', resetScales);
+        container.addEventListener('focusout', () => {
+          if (!container.contains(document.activeElement)) resetScales();
+        });
+      }
+
+      function initSubmenuSelection(container){
+        const buttons = Array.from(container.querySelectorAll('button'));
+        const titleEl = document.getElementById('content-title');
+        let animating = false;
+        buttons.forEach(btn => btn.addEventListener('click', () => {
+          if (animating) return;
+          animating = true;
+          // Fade outros e título
+          buttons.forEach(b => { if (b !== btn) b.classList.add('fade-out-quick'); });
+          titleEl.classList.add('fade-out-quick');
+          // Glitch no escolhido e depois fade
+          btn.classList.add('selected-glitch','glitching');
+          setTimeout(() => { btn.classList.remove('glitching'); btn.classList.add('fade-out-quick'); }, 900);
+          // Troca conteúdo
+          setTimeout(() => {
+            const choice = btn.textContent.trim().toLowerCase();
+            showEngajadosSection(choice);
+            animating = false;
+          }, 1250);
+        }));
+      }
+
+  function openRankingCard(){
+        const detailCard = document.getElementById('detail-card');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('detail-body');
+        const backBtn = document.getElementById('detail-back-btn');
+
+    // Título clicável: clique abre a explicação
+    titleEl.textContent = 'RANKING DE ENGAJAMENTOS';
+
+        // Simula 100 nicks e mostra 20 primeiros; botão "ver mais" carrega +20
+        const total = 100;
+        const all = Array.from({length: total}, (_, i) => `Nickname_${(i+1).toString().padStart(3,'0')}`);
+        let shown = 20;
+
+        bodyEl.innerHTML = `
+          <div class="ranking-wrap" style="max-width: 760px; margin: 0 auto; text-align:left;">
+            <div id="ranking-list" style="max-height: 50vh; overflow-y: auto; padding-right: 6px;"></div>
+            <button id="see-more" style="margin-top: 12px; width: 100%;">ver mais</button>
+          </div>
+        `;
+
+        const listEl = bodyEl.querySelector('#ranking-list');
+        const seeMore = bodyEl.querySelector('#see-more');
+
+        function renderList(){
+          const items = all.slice(0, shown).map((name, idx) => {
+            // Cada item como botão para manter a lógica do menu (hover scale pronto para futuro clique)
+            return `<button class="rank-item" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px;">
+                      <span style="opacity:.7; min-width: 48px; text-align:right;">#${idx+1}</span>
+                      <span class="nick" style="flex:1;">${name}</span>
+                    </button>`;
+          }).join('');
+          listEl.innerHTML = items;
+          // Reaplica hover scaling para os itens da lista
+          initSubmenuHoverScaling(listEl);
+          // Placeholder: clique em um ranking poderia abrir perfil no futuro
+        }
+
+        renderList();
+        seeMore.onclick = () => {
+          shown = Math.min(shown + 20, total);
+          renderList();
+          if (shown >= total) seeMore.style.display = 'none';
+        };
+
+    // Mostrar o card de detalhes
+  if (isRE7Mode()) doorOpenElement(detailCard); else detailCard.style.display = 'block';
+    // Clique no título abre explicação
+    titleEl.style.cursor = 'pointer';
+    titleEl.title = 'Como funciona? Clique para saber';
+    titleEl.onclick = openRankingInfo;
+
+        // Voltar: fecha ranking e retorna ao submenu "ENGAJADOS" (content-card permanece aberto)
+        backBtn.onclick = () => {
+          const goBack = () => { renderEngajadosMenu(); };
+          if (isRE7Mode()) doorCloseElement(detailCard, goBack); else { detailCard.style.display = 'none'; goBack(); }
+        };
+      }
+
+  function openRankingInfo(){
+        const infoCard = document.getElementById('info-card');
+        const body = document.getElementById('info-body');
+        const back = document.getElementById('info-back-btn');
+        body.innerHTML = `
+          <p>O Ranking de Engajamentos mede sua participação real com o conteúdo, premiando quem está sempre presente e ativo.</p>
+          <ul style="padding-left: 18px;">
+            <li><strong>Pontos por ação</strong>: curtir (1), comentar (3), compartilhar (5), assistir até o fim (2), responder enquetes (2).</li>
+            <li><strong>Streak (dias seguidos)</strong>: bônus progressivo a cada dia seguido engajando. Quebrou a sequência, o bônus volta ao início.</li>
+            <li><strong>Desafios e sorteios</strong>: valem pontos extras e multiplicadores temporários.</li>
+            <li><strong>Pontos extras</strong>: missões rápidas semanais liberadas na área “ENGAJADOS”.</li>
+            <li><strong>Anti-fraude</strong>: spam, bots e comportamento artificial são filtrados e desclassificados.</li>
+            <li><strong>Atualização</strong>: ranking em tempo quase real com resets semanais e mensais.</li>
+            <li><strong>Critérios de desempate</strong>: maior streak, depois maior watch time, depois data/hora da última interação.</li>
+          </ul>
+          <p>Dica: participe dos desafios, mantenha uma sequência diária e interaja de forma genuína. Seu apoio aparece aqui!</p>
+        `;
+        if (isRE7Mode()) doorOpenElement(infoCard); else infoCard.style.display = 'block';
+        back.onclick = () => {
+          if (isRE7Mode()) doorCloseElement(infoCard); else infoCard.style.display = 'none';
+        };
+  }
+
+  function openHighlightsCard(){
+        const detailCard = document.getElementById('detail-card');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('detail-body');
+        const backBtn = document.getElementById('detail-back-btn');
+
+        // Título
+        titleEl.textContent = 'COMENTÁRIOS EM DESTAQUE';
+
+        // Simula 100 comentários; exibe 20 e permite ver mais em lotes de 20
+        const total = 100;
+        const all = Array.from({length: total}, (_, i) => {
+          const nick = `Nickname_${(i+1).toString().padStart(3,'0')}`;
+          return `${nick}: Este é um comentário em destaque simulado número ${(i+1)}.`;
+        });
+        let shown = 20;
+
+        bodyEl.innerHTML = `
+          <div class="highlights-wrap" style="max-width: 860px; margin: 0 auto; text-align:left;">
+            <div id=\"highlights-list\" style=\"max-height: 50vh; overflow-y: auto; padding-right: 6px;\"></div>
+            <button id=\"see-more-highlights\" style=\"margin-top: 12px; width: 100%;\">ver mais</button>
+          </div>
+        `;
+
+        const listEl = bodyEl.querySelector('#highlights-list');
+        const seeMore = bodyEl.querySelector('#see-more-highlights');
+
+        function renderList(){
+          const items = all.slice(0, shown).map((text, idx) => {
+            return `<button class=\"comment-item\" style=\"width:100%; text-align:left; display:flex; align-items:flex-start; gap:12px; padding-top:14px; padding-bottom:14px;\">\n                      <span style=\\\"opacity:.7; min-width: 48px; text-align:right;\\\">#${idx+1}</span>\n                      <span class=\\\"comment-text\\\" style=\\\"flex:1;\\\">${text}</span>\n                    </button>`;
+          }).join('');
+          listEl.innerHTML = items;
+          // Reaplica hover scaling para os itens da lista
+          initSubmenuHoverScaling(listEl);
+        }
+
+        renderList();
+        seeMore.onclick = () => {
+          shown = Math.min(shown + 20, total);
+          renderList();
+          if (shown >= total) seeMore.style.display = 'none';
+        };
+
+        if (isRE7Mode()) doorOpenElement(detailCard); else detailCard.style.display = 'block';
+        backBtn.onclick = () => {
+          const goBack = () => { renderEngajadosMenu(); };
+          if (isRE7Mode()) doorCloseElement(detailCard, goBack); else { detailCard.style.display = 'none'; goBack(); }
+        };
+      }
+
+  function openChallengesCard(){
+        const detailCard = document.getElementById('detail-card');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('detail-body');
+        const backBtn = document.getElementById('detail-back-btn');
+
+        // Título
+        titleEl.textContent = 'DESAFIOS';
+
+        // Simula 100 desafios; exibe 20 e permite ver mais em lotes de 20
+        const total = 100;
+        const all = Array.from({length: total}, (_, i) => {
+          const pts = (i % 5 + 1) * 10; // 10,20,30,40,50
+          return `Desafio ${(i+1).toString().padStart(3,'0')}: Conclua a missão e ganhe ${pts} pontos`;
+        });
+        let shown = 20;
+
+        bodyEl.innerHTML = `
+          <div class="challenges-wrap" style="max-width: 860px; margin: 0 auto; text-align:left;">
+            <div id="challenges-list" style="max-height: 50vh; overflow-y: auto; padding-right: 6px;"></div>
+            <button id="see-more-challenges" style="margin-top: 12px; width: 100%;">ver mais</button>
+          </div>
+        `;
+
+        const listEl = bodyEl.querySelector('#challenges-list');
+        const seeMore = bodyEl.querySelector('#see-more-challenges');
+
+        function renderList(){
+          const items = all.slice(0, shown).map((text, idx) => {
+            return `<button class="challenge-item" style="width:100%; text-align:left; display:flex; align-items:flex-start; gap:12px; padding-top:14px; padding-bottom:14px;">
+                      <span style=\"opacity:.7; min-width: 48px; text-align:right;\">#${idx+1}</span>
+                      <span class=\"challenge-text\" style=\"flex:1;\">${text}</span>
+                    </button>`;
+          }).join('');
+          listEl.innerHTML = items;
+          // Reaplica hover scaling para os itens da lista
+          initSubmenuHoverScaling(listEl);
+        }
+
+        renderList();
+        seeMore.onclick = () => {
+          shown = Math.min(shown + 20, total);
+          renderList();
+          if (shown >= total) seeMore.style.display = 'none';
+        };
+
+        if (isRE7Mode()) doorOpenElement(detailCard); else detailCard.style.display = 'block';
+        backBtn.onclick = () => {
+          const goBack = () => { renderEngajadosMenu(); };
+          if (isRE7Mode()) doorCloseElement(detailCard, goBack); else { detailCard.style.display = 'none'; goBack(); }
+        };
+      }
+
+  function openGiveawaysCard(){
+        const detailCard = document.getElementById('detail-card');
+        const titleEl = document.getElementById('detail-title');
+        const bodyEl = document.getElementById('detail-body');
+        const backBtn = document.getElementById('detail-back-btn');
+
+        // Título
+        titleEl.textContent = 'SORTEIOS';
+
+        // Simula 100 sorteios; exibe 20 e permite ver mais em lotes de 20
+        const total = 100;
+        const all = Array.from({length: total}, (_, i) => {
+          const day = ((i % 28) + 1).toString().padStart(2,'0');
+          const month = (((i % 12) + 1)).toString().padStart(2,'0');
+          const year = 2025 - Math.floor(i/12);
+          const nick = `Nickname_${(i+1).toString().padStart(3,'0')}`;
+          const prize = ['Gift Card', 'Skin', 'VIP 1 mês', 'Mousepad', 'Sorteio Especial'][i % 5];
+          return { date: `${day}/${month}/${year}`, winner: nick, prize };
+        });
+        let shown = 20;
+
+        bodyEl.innerHTML = `
+          <div class="giveaways-wrap" style="max-width: 860px; margin: 0 auto; text-align:left;">
+            <div id="giveaways-list" style="max-height: 50vh; overflow-y: auto; padding-right: 6px;"></div>
+            <button id="see-more-giveaways" style="margin-top: 12px; width: 100%;">ver mais</button>
+          </div>
+        `;
+
+        const listEl = bodyEl.querySelector('#giveaways-list');
+        const seeMore = bodyEl.querySelector('#see-more-giveaways');
+
+        function renderList(){
+          const items = all.slice(0, shown).map((g, idx) => {
+            return `<button class="giveaway-item" style="width:100%; text-align:left; display:flex; align-items:flex-start; gap:12px; padding-top:14px; padding-bottom:14px;">
+                      <span style=\"opacity:.7; min-width: 48px; text-align:right;\">#${idx+1}</span>
+                      <span class=\"giveaway-text\" style=\"flex:1;\"><strong>${g.date}</strong> — Vencedor: ${g.winner} — Prêmio: ${g.prize}</span>
+                    </button>`;
+          }).join('');
+          listEl.innerHTML = items;
+          // Reaplica hover scaling para os itens da lista
+          initSubmenuHoverScaling(listEl);
+        }
+
+        renderList();
+        seeMore.onclick = () => {
+          shown = Math.min(shown + 20, total);
+          renderList();
+          if (shown >= total) seeMore.style.display = 'none';
+        };
+
+        if (isRE7Mode()) doorOpenElement(detailCard); else detailCard.style.display = 'block';
+        backBtn.onclick = () => {
+          const goBack = () => { renderEngajadosMenu(); };
+          if (isRE7Mode()) doorCloseElement(detailCard, goBack); else { detailCard.style.display = 'none'; goBack(); }
+        };
+      }
+
+      function showEngajadosSection(choice){
+        // Define título e conteúdo do subnível
+        const map = {
+          'ranking de engajamentos': 'Veja o ranking atualizado de quem mais engaja com o conteúdo.',
+          'comentários em destaque': 'Comentários da semana em destaque selecionados pela comunidade.',
+          'desafios': 'Participe dos desafios em andamento e conquiste troféus.',
+          'sorteios': 'Próximos sorteios e regras de participação.',
+          'pontos extras para o engajamento': 'Missões rápidas para ganhar pontos extras e subir no ranking.'
+        };
+        if (choice === 'ranking de engajamentos') {
+          openRankingCard();
+          return;
+        } else if (choice === 'comentários em destaque') {
+          openHighlightsCard();
+          return;
+        } else if (choice === 'desafios') {
+          openChallengesCard();
+          return;
+        } else if (choice === 'sorteios') {
+          openGiveawaysCard();
+          return;
+        }
+        const title = choice.toUpperCase();
+        document.getElementById('content-title').textContent = title;
+        contentBody.innerHTML = `<p style=\"max-width: 860px; margin: 0 auto;\">${map[choice] || 'Conteúdo em breve.'}</p>`;
+      }
+
+      // Voltar para o menu
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          const hideThen = () => {
+            // mostra menu novamente
+            const menuEl = document.getElementById('menu');
+            menuEl.style.display = 'block';
+            applyCommunityLockStyles();
+          };
+          if (isRE7Mode()) doorCloseElement(contentCard, hideThen); else { contentCard.style.display = 'none'; hideThen(); }
+        });
+      }
+    }
+
+    // Intercepta seleção da Comunidade quando bloqueado
+    // Ajuste dentro do initMenuSelection: usamos event delegation com gancho no próprio handler
+    // Para garantir, sobrepomos comportamento via captura de evento no botão após init.
+    document.addEventListener('DOMContentLoaded', () => {
+      // Após load animado terminar, o menu é mostrado depois do fake progress.
+      // Aqui garantimos que a UI inicial reflita o estado salvo se a página recarregar.
+      setTimeout(() => { applyCommunityLockStyles(); }, 50);
+    });
+
+    // ===== Música de fundo: Miside =====
+    function getSavedVolume(){
+      try {
+        const v = parseFloat(localStorage.getItem('musicVol') || '0.7');
+        return (isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.7);
+      } catch { return 0.7; }
+    }
+    function setSavedVolume(v){
+      try { localStorage.setItem('musicVol', String(Math.min(1, Math.max(0, v)))); } catch {}
+    }
+    function initBackgroundMusic(options){
+      const opts = Object.assign({ initialVolume: 0.7, showWidget: true }, options || {});
+      const audio = document.getElementById('bg-audio');
+      const widget = document.getElementById('music-widget');
+      const toggleBtn = document.getElementById('music-toggle');
+      const imgEl = document.getElementById('music-image');
+      const metaEl = document.getElementById('music-meta');
+      const timeEl = document.getElementById('music-time');
+      const progress = document.getElementById('music-progress');
+      const pauseBtn = document.getElementById('music-pause');
+      const stopBtn = document.getElementById('music-stop');
+      const nextBtn = document.getElementById('music-next');
+      const volSlider = document.getElementById('music-volume');
+      if (!audio || !widget) return;
+
+      // Evita reinitializar várias vezes
+      if (audio.dataset && audio.dataset.musicInit === '1') {
+        // Apenas ajusta exibição e volume se for reinvocado
+        widget.style.display = opts.showWidget ? 'flex' : 'none';
+        audio.volume = opts.initialVolume;
+        return;
+      }
+
+      let timeTimer = null;
+      let attempted = false;
+
+  // Playlist: Miside (red), Nero (blue), RE4 (green), RE7 (amber), SNAS (purple), Vergil (indigo)
+      const tracks = [
+        { id: 'miside', title: 'Miside tema do menu', src: 'assets/miside.m4a', image: 'assets/misidepng.png', theme: 'red' },
+        { id: 'nero', title: 'Nero tema do menu', src: 'assets/nero.m4a', image: 'assets/neropng.png', theme: 'blue' },
+        { id: 're4', title: 'RE4 tema do menu', src: 'assets/re4.m4a', image: 'assets/re4png.png', theme: 'green' },
+        { id: 're7', title: 'RE7 tema do menu', src: 'assets/re7.m4a', image: 'assets/re7png.png', theme: 'amber' },
+        { id: 'snas', title: 'SNAS tema do menu', src: 'assets/snas.m4a', image: 'assets/snspng.png', theme: 'purple' },
+        { id: 'vergil', title: 'Vergil tema do menu', src: 'assets/vergil.m4a', image: 'assets/vergilnpg.png', theme: 'indigo' }
+      ];
+  let currentTrack = Math.floor(Math.random() * tracks.length); // começa aleatório
+
+      function applyTheme(theme){
+        widget.classList.remove('theme-red','theme-blue','theme-green','theme-amber','theme-purple','theme-indigo');
+        if (theme === 'red') widget.classList.add('theme-red');
+        else if (theme === 'blue') widget.classList.add('theme-blue');
+        else if (theme === 'green') widget.classList.add('theme-green');
+        else if (theme === 'amber') widget.classList.add('theme-amber');
+        else if (theme === 'purple') widget.classList.add('theme-purple');
+        else if (theme === 'indigo') widget.classList.add('theme-indigo');
+        // Aplica tema visual ao disco (toggle)
+        if (toggleBtn){
+          toggleBtn.classList.remove('theme-red','theme-blue','theme-green','theme-amber','theme-purple','theme-indigo');
+          if (theme === 'red') toggleBtn.classList.add('theme-red');
+          else if (theme === 'blue') toggleBtn.classList.add('theme-blue');
+          else if (theme === 'green') toggleBtn.classList.add('theme-green');
+          else if (theme === 'amber') toggleBtn.classList.add('theme-amber');
+          else if (theme === 'purple') toggleBtn.classList.add('theme-purple');
+          else if (theme === 'indigo') toggleBtn.classList.add('theme-indigo');
+        }
+      }
+
+      function loadTrack(idx, autoplay){
+        currentTrack = ((idx % tracks.length) + tracks.length) % tracks.length;
+        const t = tracks[currentTrack];
+        if (imgEl) imgEl.src = t.image;
+        if (metaEl) metaEl.textContent = t.title;
+  applyTheme(t.theme);
+  // Ao iniciar faixa: entra no modo DMC5 para Nero/Vergil; senão reverte
+  if (t.id === 'nero' || t.id === 'vergil') { enterDMC5Mode(); }
+  else { leaveDMC5Mode(); }
+        // Ao iniciar faixa: entra no modo MISIDE para miside; senão reverte
+        if (t.id === 'miside') { enterMisideMode(); }
+        else { leaveMisideMode(); }
+        // Ao iniciar faixa: entra no modo RE4 para re4; senão reverte
+        if (t.id === 're4') { enterRE4Mode(); }
+        else { leaveRE4Mode(); }
+        // Ao iniciar faixa: entra no modo RE7 para re7; senão reverte
+        if (t.id === 're7') { enterRE7Mode(); }
+        else { leaveRE7Mode(); }
+        // Ao iniciar faixa: entra no modo SNAS para snas; senão reverte
+        if (t.id === 'snas') { enterSNASMode(); }
+        else { leaveSNASMode(); }
+        const wasPaused = audio.paused;
+        try { audio.pause(); } catch {}
+        audio.src = t.src;
+        audio.currentTime = 0;
+        updatePauseLabel();
+        if (autoplay || !wasPaused){
+          audio.play().then(() => { updatePauseLabel(); startTimer(); }).catch(() => { updatePauseLabel(); });
+        }
+      }
+
+      function fmt(sec){
+        if (!isFinite(sec)) return '00:00';
+        const s = Math.floor(sec % 60).toString().padStart(2,'0');
+        const m = Math.floor(sec / 60).toString().padStart(2,'0');
+        return `${m}:${s}`;
+      }
+
+      function updateTime(){
+        const cur = audio.currentTime || 0;
+        const dur = audio.duration || 0;
+        timeEl.textContent = `${fmt(cur)} / ${fmt(dur)}`;
+        if (dur > 0) progress.value = Math.round((cur / dur) * 100);
+      }
+
+      function startTimer(){ if (!timeTimer) timeTimer = setInterval(updateTime, 250); }
+      function stopTimer(){ if (timeTimer) { clearInterval(timeTimer); timeTimer = null; } }
+
+  function updatePauseLabel(){ pauseBtn.textContent = audio.paused ? 'play' : 'pause'; }
+  function updateSpin(){ if (toggleBtn) toggleBtn.classList.toggle('spinning', !audio.paused); }
+
+  // Exibição inicial do widget e volume baixo/normal conforme opts
+  widget.style.display = opts.showWidget ? 'flex' : 'none';
+  if (toggleBtn) toggleBtn.style.display = 'none';
+  audio.volume = opts.initialVolume;
+
+      // Define a faixa inicial aleatória antes de tentar tocar
+      try { loadTrack(currentTrack, false); } catch {}
+
+      // Attempt autoplay
+      const tryPlay = () => {
+        if (attempted) return;
+        attempted = true;
+        audio.play().then(() => {
+          updatePauseLabel();
+          startTimer();
+        }).catch(() => {
+          // Autoplay bloqueado — aguarda primeira interação do usuário
+          updatePauseLabel();
+          const onFirst = () => {
+            audio.play().finally(() => {
+              updatePauseLabel();
+              startTimer();
+            });
+            window.removeEventListener('pointerdown', onFirst, { capture: true });
+          };
+          window.addEventListener('pointerdown', onFirst, { capture: true, once: true });
+        });
+      };
+
+      if (audio.readyState >= 2) {
+        tryPlay();
+      } else {
+        audio.addEventListener('canplay', tryPlay, { once: true });
+        // Fallback: try after 1.2s
+        setTimeout(tryPlay, 1200);
+      }
+
+  audio.addEventListener('loadedmetadata', updateTime);
+  audio.addEventListener('timeupdate', updateTime);
+  audio.addEventListener('play', () => { updatePauseLabel(); updateSpin(); startTimer(); });
+  audio.addEventListener('pause', () => { updatePauseLabel(); updateSpin(); });
+  audio.addEventListener('ended', () => { updateTime(); updatePauseLabel(); updateSpin();
+        const t = tracks[currentTrack];
+        if (t && (t.id === 'nero' || t.id === 'vergil')) { enterDMC5Mode(); }
+        if (t && t.id === 'miside') { enterMisideMode(); }
+        if (t && t.id === 're4') { enterRE4Mode(); }
+        if (t && t.id === 're7') { enterRE7Mode(); }
+    if (t && t.id === 'snas') { enterSNASMode(); }
+      });
+
+      pauseBtn.onclick = () => {
+        if (audio.paused) { audio.play().then(() => { updatePauseLabel(); startTimer(); }); }
+        else { audio.pause(); updatePauseLabel(); }
+      };
+      stopBtn.onclick = () => {
+        audio.pause(); audio.currentTime = 0; stopTimer(); updateTime(); updatePauseLabel();
+        // fecha widget
+        widget.style.transition = 'opacity .25s ease, transform .25s ease';
+        widget.style.opacity = '0';
+        widget.style.transform = 'translateY(-6px)';
+        setTimeout(() => { widget.style.display = 'none'; }, 260);
+        // Se parou em Nero ou Vergil, ativa modo DMC5
+        const t = tracks[currentTrack];
+        if (t && (t.id === 'nero' || t.id === 'vergil')) { enterDMC5Mode(); }
+        // Se parou em Miside, ativa modo MISIDE
+        if (t && t.id === 'miside') { enterMisideMode(); }
+        // Se parou em RE4, ativa modo RE4
+        if (t && t.id === 're4') { enterRE4Mode(); }
+        // Se parou em RE7, ativa modo RE7
+        if (t && t.id === 're7') { enterRE7Mode(); }
+        // Se parou em SNAS, ativa modo SNAS
+        if (t && t.id === 'snas') { enterSNASMode(); }
+      };
+      if (nextBtn){
+        nextBtn.onclick = () => {
+          loadTrack(currentTrack + 1, true);
+          try { showTrackToast(tracks[currentTrack].title); } catch {}
+        };
+      }
+      progress.addEventListener('input', () => {
+        const dur = audio.duration || 0; if (dur > 0) { audio.currentTime = (progress.value/100) * dur; updateTime(); }
+      });
+
+      // Volume slider: usa valor salvo e permite ajuste pelo usuário
+      if (volSlider){
+        try { volSlider.value = String(Math.round(getSavedVolume() * 100)); } catch {}
+        volSlider.addEventListener('input', () => {
+          const v = Math.min(100, Math.max(0, parseInt(volSlider.value||'0',10)))/100;
+          audio.volume = v;
+          setSavedVolume(v);
+        });
+      }
+
+      // Marca como inicializado
+      if (!audio.dataset) audio.dataset = {};
+      audio.dataset.musicInit = '1';
+
+  // Inicializa tema/título/arte conforme a faixa atual escolhida
+  applyTheme(tracks[currentTrack].theme);
+  if (metaEl) metaEl.textContent = tracks[currentTrack].title;
+  if (imgEl) imgEl.src = tracks[currentTrack].image;
+
+      // Clique no disco: abre/fecha o widget e mostra o toast com o nome da faixa
+      if (toggleBtn){
+        toggleBtn.onclick = () => {
+          const isHidden = (widget.style.display === 'none' || widget.style.display === '');
+          if (isHidden){
+            widget.style.display = 'flex';
+            widget.classList.remove('widget-enter'); void widget.offsetWidth; widget.classList.add('widget-enter');
+            try { showTrackToast(tracks[currentTrack].title); } catch {}
+          } else {
+            widget.style.transition = 'opacity .2s ease, transform .2s ease';
+            widget.style.opacity = '0'; widget.style.transform = 'translateY(-6px)';
+            setTimeout(() => { widget.style.display = 'none'; widget.style.opacity = ''; widget.style.transform = ''; }, 220);
+          }
+        };
+      }
+
+      // Entrar no modo Devil May Cry 5: altera fonte/cores com animação lenta
+      function enterDMC5Mode(){
+        const body = document.body;
+        // Idempotente: se já está no modo, não repete
+        // Garante overlay
+        if (!document.getElementById('dmc5-overlay')){
+          const ov = document.createElement('div');
+          ov.id = 'dmc5-overlay';
+          document.body.appendChild(ov);
+        }
+        if (body.classList.contains('dmc5-mode')) {
+          // ainda assim aplica reposicionamento dos painéis
+          try { applyDMC5PanelShift(true); } catch {}
+          return;
+        }
+        body.classList.add('dmc5-transitioning');
+        // Leve atraso para permitir transições pegarem
+        setTimeout(() => { body.classList.add('dmc5-mode'); applyDMC5PanelShift(true); }, 30);
+        // Remove o estado de transição depois
+        setTimeout(() => { body.classList.remove('dmc5-transitioning'); }, 1600);
+      }
+
+      // Sair do modo DMC5 com transição lenta
+      function leaveDMC5Mode(){
+        const body = document.body;
+        if (!body.classList.contains('dmc5-mode')) return;
+        body.classList.add('dmc5-transitioning');
+        // Aplica a remoção com leve atraso para que a transição seja percebida
+        setTimeout(() => { body.classList.remove('dmc5-mode'); applyDMC5PanelShift(false); }, 30);
+        setTimeout(() => { body.classList.remove('dmc5-transitioning'); }, 1600);
+        setTimeout(() => { const el = document.getElementById('dmc5-overlay'); if (el) try { el.remove(); } catch {} }, 1650);
+      }
+
+      function applyDMC5PanelShift(apply){
+        const ids = ['content-card','detail-card','info-card'];
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (apply) el.classList.add('dmc5-shift');
+          else el.classList.remove('dmc5-shift');
+        });
+      }
+
+      // Entrar no modo MISIDE: cores pretas/cinza escuro e azul petróleo, animação lenta
+      function enterMisideMode(){
+        const body = document.body;
+        if (!document.getElementById('miside-overlay')){
+          const ov = document.createElement('div');
+          ov.id = 'miside-overlay';
+          document.body.appendChild(ov);
+        }
+        if (body.classList.contains('miside-mode')) return;
+        body.classList.add('miside-transitioning');
+        setTimeout(() => { body.classList.add('miside-mode'); }, 30);
+        setTimeout(() => { body.classList.remove('miside-transitioning'); }, 1600);
+      }
+      // Sair do modo MISIDE
+      function leaveMisideMode(){
+        const body = document.body;
+        if (!body.classList.contains('miside-mode')) return;
+        body.classList.add('miside-transitioning');
+        setTimeout(() => { body.classList.remove('miside-mode'); }, 30);
+        setTimeout(() => { body.classList.remove('miside-transitioning'); }, 1600);
+        setTimeout(() => { const el = document.getElementById('miside-overlay'); if (el) try { el.remove(); } catch {} }, 1650);
+      }
+
+      // Entrar no modo RE4: fonte técnica e paleta vermelho escuro/metal
+      function enterRE4Mode(){
+        const body = document.body;
+        if (!document.getElementById('re4-overlay')){
+          const ov = document.createElement('div');
+          ov.id = 're4-overlay';
+          document.body.appendChild(ov);
+        }
+        if (body.classList.contains('re4-mode')) { try { applyRE4PanelShift(true); } catch {} return; }
+        body.classList.add('re4-transitioning');
+        setTimeout(() => { body.classList.add('re4-mode'); applyRE4PanelShift(true); }, 30);
+        setTimeout(() => { body.classList.remove('re4-transitioning'); }, 1600);
+      }
+      function leaveRE4Mode(){
+        const body = document.body;
+        if (!body.classList.contains('re4-mode')) return;
+        body.classList.add('re4-transitioning');
+        setTimeout(() => { body.classList.remove('re4-mode'); applyRE4PanelShift(false); }, 30);
+        setTimeout(() => { body.classList.remove('re4-transitioning'); }, 1600);
+        // Remove overlay após a transição
+        setTimeout(() => { const el = document.getElementById('re4-overlay'); if (el) try { el.remove(); } catch {} }, 1650);
+      }
+
+      function applyRE4PanelShift(apply){
+        const ids = ['content-card','detail-card','info-card'];
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (apply) el.classList.add('re4-shift');
+          else el.classList.remove('re4-shift');
+        });
+      }
+
+      // Entrar/Sair do modo RE7
+      function enterRE7Mode(){
+        const body = document.body;
+        if (!document.getElementById('re7-overlay')){
+          const ov = document.createElement('div');
+          ov.id = 're7-overlay';
+          document.body.appendChild(ov);
+        }
+        if (body.classList.contains('re7-mode')) return;
+        body.classList.add('re7-transitioning');
+        setTimeout(() => { body.classList.add('re7-mode'); }, 30);
+        setTimeout(() => { body.classList.remove('re7-transitioning'); }, 1600);
+      }
+      function leaveRE7Mode(){
+        const body = document.body;
+        if (!body.classList.contains('re7-mode')) return;
+        body.classList.add('re7-transitioning');
+        setTimeout(() => { body.classList.remove('re7-mode'); }, 30);
+        setTimeout(() => { body.classList.remove('re7-transitioning'); }, 1600);
+        setTimeout(() => { const el = document.getElementById('re7-overlay'); if (el) try { el.remove(); } catch {} }, 1650);
+      }
+
+      // Entrar/Sair do modo SNAS (retrô)
+      function enterSNASMode(){
+        const body = document.body;
+        if (!document.getElementById('snas-overlay')){
+          const ov = document.createElement('div');
+          ov.id = 'snas-overlay';
+          document.body.appendChild(ov);
+        }
+        if (body.classList.contains('snas-mode')) return;
+        body.classList.add('snas-transitioning');
+        setTimeout(() => { body.classList.add('snas-mode'); }, 30);
+        setTimeout(() => { body.classList.remove('snas-transitioning'); }, 1600);
+      }
+      function leaveSNASMode(){
+        const body = document.body;
+        if (!body.classList.contains('snas-mode')) return;
+        body.classList.add('snas-transitioning');
+        setTimeout(() => { body.classList.remove('snas-mode'); }, 30);
+        setTimeout(() => { body.classList.remove('snas-transitioning'); }, 1600);
+        setTimeout(() => { const el = document.getElementById('snas-overlay'); if (el) try { el.remove(); } catch {} }, 1650);
+      }
+
+      // Alternar manualmente o modo DMC5 (atalho: Ctrl+Shift+D)
+      function toggleDMC5Mode(){
+        const enabled = document.body.classList.contains('dmc5-mode');
+        if (enabled) { leaveDMC5Mode(); try { showTrackToast('Modo DMC5 desativado'); } catch {} }
+        else { enterDMC5Mode(); try { showTrackToast('Modo DMC5 ativado'); } catch {} }
+      }
+      window.addEventListener('keydown', (e) => {
+        // Ctrl+Shift+D para alternar
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'D' || e.key === 'd')){
+          e.preventDefault();
+          toggleDMC5Mode();
+        }
+      });
+
+      // Helpers de porta (RE7) foram movidos para escopo global
+    }
+
+    function musicShowWidgetAndSetVolume(vol, durationMs){
+      const audio = document.getElementById('bg-audio');
+      const widget = document.getElementById('music-widget');
+      if (!audio || !widget) return;
+      if (!(audio.dataset && audio.dataset.musicInit === '1')){
+        // Caso não tenha sido inicializado ainda, inicializa já visível com volume desejado
+        initBackgroundMusic({ initialVolume: (typeof vol === 'number' ? vol : 0.7), showWidget: true });
+        // Anima entrada
+        widget.classList.remove('widget-enter'); void widget.offsetWidth; widget.classList.add('widget-enter');
+        return;
+      }
+      const target = (typeof vol === 'number' ? vol : 0.7);
+      const dur = Math.max(0, (typeof durationMs === 'number' ? durationMs : 900));
+      // Exibe com animação de entrada
+      widget.style.display = 'flex';
+      widget.classList.remove('widget-enter'); void widget.offsetWidth; widget.classList.add('widget-enter');
+      // Tween de volume suave
+      try { cancelAnimationFrame(window.__volTweenRaf || 0); } catch {}
+      const startVol = audio.volume || 0;
+      const delta = target - startVol;
+      if (Math.abs(delta) < 0.005 || dur === 0){ audio.volume = target; return; }
+      let start = 0;
+      function easeInOut(t){ return t<.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2)/2; }
+      function step(ts){
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / dur);
+        const e = easeInOut(p);
+        audio.volume = Math.min(1, Math.max(0, startVol + delta * e));
+        if (p < 1) { window.__volTweenRaf = requestAnimationFrame(step); }
+        else { audio.volume = target; }
+      }
+      window.__volTweenRaf = requestAnimationFrame(step);
+    }
+
+    function musicShowToggleAndSetVolume(vol, durationMs){
+      const audio = document.getElementById('bg-audio');
+      const toggleBtn = document.getElementById('music-toggle');
+      if (!audio || !toggleBtn) return;
+      // Mostra o disco
+      toggleBtn.style.display = 'grid';
+      // Ajusta estado de rotação conforme reprodução atual
+      toggleBtn.classList.toggle('spinning', !audio.paused);
+      // Tween de volume suave até o alvo
+      try { cancelAnimationFrame(window.__volTweenRaf || 0); } catch {}
+      const target = (typeof vol === 'number' ? vol : 0.7);
+      const dur = Math.max(0, (typeof durationMs === 'number' ? durationMs : 900));
+      const startVol = audio.volume || 0;
+      const delta = target - startVol;
+      if (Math.abs(delta) < 0.005 || dur === 0){ audio.volume = target; return; }
+      let start = 0;
+      function easeInOut(t){ return t<.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2)/2; }
+      function step(ts){
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / dur);
+        const e = easeInOut(p);
+        audio.volume = Math.min(1, Math.max(0, startVol + delta * e));
+        if (p < 1) { window.__volTweenRaf = requestAnimationFrame(step); }
+        else { audio.volume = target; }
+      }
+      window.__volTweenRaf = requestAnimationFrame(step);
+    }
+
+    function showTrackToast(text){
+      let toast = document.getElementById('track-toast');
+      if (!toast){
+        toast = document.createElement('div');
+        toast.id = 'track-toast';
+        toast.style.position = 'fixed';
+        toast.style.top = '16px';
+        toast.style.right = '16px';
+        toast.style.maxWidth = '62vw';
+        toast.style.background = 'rgba(255,255,255,.97)';
+        toast.style.color = 'black';
+        toast.style.border = '3px solid white';
+        toast.style.borderRadius = '12px';
+        toast.style.padding = '8px 12px';
+        toast.style.boxShadow = '0 10px 30px rgba(0,0,0,.35)';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-6px)';
+        toast.style.transition = 'opacity .22s ease, transform .22s ease';
+        toast.style.zIndex = '99999';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = text;
+      requestAnimationFrame(() => { toast.style.opacity = '1'; toast.style.transform = 'translateY(0)'; });
+      setTimeout(() => {
+        toast.style.opacity = '0'; toast.style.transform = 'translateY(-6px)';
+        setTimeout(() => { try { toast.remove(); } catch {} }, 240);
+      }, 1600);
+    }
+  </script>
+  <script>
+    // ===== Helpers globais: animação de porta para RE7 =====
+    function isRE7Mode(){ return document.body.classList.contains('re7-mode'); }
+    function doorOpenElement(el){
+      if (!el) return;
+      el.style.display = 'block';
+      const prev = el.style.animation;
+      el.style.transformOrigin = 'left center';
+      el.style.animation = 'doorOpen .7s cubic-bezier(.16,.84,.44,1) forwards';
+      setTimeout(() => { el.style.animation = prev || ''; el.style.transformOrigin = ''; }, 750);
+    }
+    function doorCloseElement(el, onDone){
+      if (!el) { if (onDone) onDone(); return; }
+      const prev = el.style.animation;
+      el.style.transformOrigin = 'left center';
+      el.style.animation = 'doorClose .6s cubic-bezier(.16,.84,.44,1) forwards';
+      setTimeout(() => {
+        el.style.animation = prev || '';
+        el.style.transformOrigin = '';
+        el.style.display = 'none';
+        if (typeof onDone === 'function') onDone();
+      }, 650);
+    }
+  </script>
+</body>
+</html>
